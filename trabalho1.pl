@@ -109,7 +109,7 @@ bisneto(N, B) :-
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente -> {V,F}
 
-descendente(D,A) :- filho(D,A);filho(D,N),descendente(A,N).
+descendente(D,A) :- filho(D,A);filho(D,N),descendente(N,A).
 
 % desdendente(D,A) :- ascendente(A,D).
 
