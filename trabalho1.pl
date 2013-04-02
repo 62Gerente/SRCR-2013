@@ -116,8 +116,8 @@ descendente(D,A) :- filho(D,A);filho(D,N),descendente(N,A).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente,Grau -> {V,F}
 
-descendente(D,A,1) :- filho(D,A).
-descendente(D,A,Z) :- filho(D,N);descendente(N,A,G), Z is G+1.
+%descendente(D,A,1) :- filho(D,A).
+descendente(D,A,Z) :- filho(D,A);filho(D,N),descendente(N,A,G), Z is G+1.
 
 % descendente (D,A,Z) :- ascendente (A,D,Z).
 
