@@ -53,11 +53,11 @@ sobrinho(S,T) :- irmao(X,T), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
-
+primo(P1, P2) :- filho(P1,X), tio(X,P2); %-pai(X,P1), irmao(X,Y), pai(Y,P2). 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
-
+irmao(I1, I2) :- filho(I1,X), filho(I2,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
