@@ -61,17 +61,29 @@ irmao(I1, I2) :- filho(I1,X), filho(I2,X).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
 
+avo(A, N) :- 
+	filho(X, A),
+	filho(N, X) .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado neto: Neto,Avo -> {V,F}
 
+neto(N, A) :-
+	avo(A, N) .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado bisavo: Bisavo,Bisneto -> {V,F}
 
+bisavo(B, N) :-
+	filho(X, B),
+	filho(Y, X),
+	filho(N, Y).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado bisneto: Bisneto,Bisavo -> {V,F}
+
+bisneto(N, B) :-
+	bisavo(B, N) .
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
