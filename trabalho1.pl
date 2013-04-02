@@ -65,17 +65,17 @@ tio(T,S) :- irmao(T,X), filho(S,X).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado sobrinho: Sobrinho,Tio -> {V,F}
 
-sobrinho(S,T) :- irmao(X,T), filho(S,X).
+sobrinho(S,T) :- tio(T,S).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
 
-primo(P1, P2) :- filho(P1,X), tio(X,P2). 
-
+primo(P1, P2) :- filho(P1,X), tio(X,P2).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
 
+irmao(I,I) :- fail.
 irmao(I1, I2) :- filho(I1,X), filho(I2,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
