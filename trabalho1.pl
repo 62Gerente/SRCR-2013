@@ -76,18 +76,32 @@ pai( P,F ) :- filho( F,P ).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente -> {V,F}
 
+descendente(D,A) :- filho(D,A);filho(D,N),descendente(A,N).
+
+% desdendente(D,A) :- ascendente(A,D).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente,Grau -> {V,F}
 
+descendente(D,A,1) :- filho(D,A).
+descendente(D,A,Z) :- filho(D,N);descendente(N,A,G), Z is G+1.
+
+% descendente (D,A,Z) :- ascendente (A,D,Z).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente -> {V,F}
 
+ascendente(A,D) :- descendente(D,A).
+
+% ascendente(A,D) :- filho(D,A);filho(D,N),ascendente(A,N).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente,Grau -> {V,F}
 
+ascendente(A,D,Z) :- descendente(D,A,Z).
+
+% ascendente(A,D,1) :- filho(D,A).
+% ascendente(A,D,Z) :- filho(D,N);ascendente(A,N,G), Z is G+1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado natural: Individuo,Local -> {V,F}
