@@ -22,7 +22,7 @@
 
 :- op( 900,xfy,'::' ).
 :- dynamic filho/2.
-:- dynamic pai/2.
+:- dynamic natural/2.
 
 % Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
@@ -34,7 +34,23 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
 
-%filho( F,P ) :- pai( P,F ).
+filho(Zacarias,Zeca).
+filho(Zacarias,Tina).
+
+filho(Fatima,Zeca).
+filho(Fatima,Tina).
+
+filho(ZecaJ,Lena).
+filho(ZecaJ,Zacarias).
+
+filho(Alice,ZecaJ).
+filho(Alice,Susana).
+
+filho(Marcos,Fatima).
+filho(Marcos,Telmo).
+
+filho(Maria,Fatima).
+filho(Maria,Telmo).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado pai: Pai,Filho -> {V,F}
@@ -43,19 +59,23 @@ pai( P,F ) :- filho( F,P ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado tio: Tio,Sobrinho -> {V,F}
+
 tio(T,S) :- irmao(T,X), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado sobrinho: Sobrinho,Tio -> {V,F}
+
 sobrinho(S,T) :- irmao(X,T), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
+
 primo(P1, P2) :- filho(P1,X), tio(X,P2). 
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
+
 irmao(I1, I2) :- filho(I1,X), filho(I2,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
