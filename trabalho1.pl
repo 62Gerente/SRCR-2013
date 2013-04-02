@@ -23,8 +23,6 @@
 :- op( 900,xfy,'::' ).
 :- dynamic filho/2.
 :- dynamic pai/2.
-:- dynamic tio/2.
-:- dynamic sobrinho/2.
 
 % Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
@@ -36,7 +34,7 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
 
-filho( F,P ) :- pai( P,F ).
+%filho( F,P ) :- pai( P,F ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado pai: Pai,Filho -> {V,F}
@@ -53,7 +51,8 @@ sobrinho(S,T) :- irmao(X,T), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
-primo(P1, P2) :- filho(P1,X), tio(X,P2); %-pai(X,P1), irmao(X,Y), pai(Y,P2). 
+primo(P1, P2) :- filho(P1,X), tio(X,P2). 
+
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
