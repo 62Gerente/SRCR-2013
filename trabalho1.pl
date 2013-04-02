@@ -34,23 +34,23 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
 
-filho(Zacarias,Zeca).
-filho(Zacarias,Tina).
+filho(zacarias,zeca).
+filho(zacarias,tina).
 
-filho(Fatima,Zeca).
-filho(Fatima,Tina).
+filho(fatima,zeca).
+filho(fatima,tina).
 
-filho(ZecaJ,Lena).
-filho(ZecaJ,Zacarias).
+filho(zecaj,lena).
+filho(zecaj,zacarias).
 
-filho(Alice,ZecaJ).
-filho(Alice,Susana).
+filho(alice,zecaj).
+filho(alice,susana).
 
-filho(Marcos,Fatima).
-filho(Marcos,Telmo).
+filho(marcos,fatima).
+filho(marcos,telmo).
 
-filho(Maria,Fatima).
-filho(Maria,Telmo).
+filho(maria,fatima).
+filho(maria,telmo).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado pai: Pai,Filho -> {V,F}
