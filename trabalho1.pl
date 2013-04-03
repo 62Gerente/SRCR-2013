@@ -75,8 +75,7 @@ primo(P1, P2) :- filho(P1,X), tio(X,P2).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
 
-irmao(I,I) :- fail.
-irmao(I1, I2) :- filho(I1,X), filho(I2,X).
+irmao(I1, I2) :- filho(I1,X), filho(I2,X), I1 \== I2.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
@@ -128,10 +127,43 @@ ascendente(A,D) :- descendente(D,A).
 ascendente(A,D,Z) :- descendente(D,A,Z).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Extensao do predicado natural: Individuo,Local -> {V,F}
+% Extensao do predicado nao: Questao -> {V,F}
 
+nao(Questao) :-
+	Questao, !, fail .
+nao(Questao) .
+
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado solucoes: X,Teorema,Solucoes -> {V, F}
+
+solucoes(X, Teorema, Solucoes) :-
+	Teorema, assert(temp(X)), fail. 
+solucoes(X, Teorema, Solucoes) :-
+	assert(temp(fim)), construir(Solucoes).
+
+construir(Solucoes) :-
+	retract(temp(Y)), !,
+		(Y==fim, !, Solucoes=[];
+		Solucoes=[Y | Resto], construir(Resto)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a evolucao do conhecimento
 
+inserirConhecimento(Termo) :-
+	insercao(Termo) .
+
+insercao(Termo) :-
+	assert(Termo) .
+insercao(Termo)	:-
+	retract(Termo), !, fail .
+
+remocao(Termo) :-
+	retract(Termo) .
+remocao(Termo)	:-
+	assert(Termo), !, fail .	
+
+teste([]) .
+teste([H|T]) :-
+	H, teste(T) .
 
