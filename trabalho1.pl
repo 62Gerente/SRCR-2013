@@ -30,6 +30,10 @@
 				comprimento( S,N ), N == 1
 				).
 
++natural(I,L) :: (solucoes((I,L),(natural( I,L )), S),
+				comprimento( S,N ), N == 1
+				).
+
 
 % Invariante Referencial: nao admitir mais do que 2 progenitores
 %                         para um mesmo individuo
@@ -37,6 +41,11 @@
 +filho( F,P ) :: (soluccoes( Ps, (filho(F, Ps)), S ),
 				 comprimento( S,N ), N =< 2
 				 ).
+
++natural( I,L ) :: (soluccoes( Ls, (natural(I, Ls)), S ),
+				 comprimento( S,N ), N == 1
+				 ).
+
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
@@ -158,12 +167,19 @@ construir(Solucoes) :-
 % Extensão do predicado que permite a evolucao do conhecimento
 
 inserirConhecimento(Termo) :-
-	insercao(Termo) .
+	solucoes( Invariante, +Termo::Invariante, Lista),
+	insercao(Termo),
+	teste( Lista ).
 
 insercao(Termo) :-
 	assert(Termo) .
 insercao(Termo)	:-
 	retract(Termo), !, fail .
+
+removerConhecimento(Termo) :-
+	solucoes( Invariante, +Termo::Invariante, Lista),
+	remocao(Termo),
+	teste( Lista ).
 
 remocao(Termo) :-
 	retract(Termo) .
