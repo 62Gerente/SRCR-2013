@@ -175,7 +175,6 @@ teste([H|T]) :-
 	H, teste(T) .
 
 
-<<<<<<< HEAD
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
 
@@ -183,5 +182,3 @@ comprimento([], 0) .
 comprimento([H|T], R) :-
 	comprimento(T, X),
 	R is 1+X .
-=======
->>>>>>> HOLA BITHCES
