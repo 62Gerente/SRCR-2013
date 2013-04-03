@@ -26,11 +26,11 @@
 
 % Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
-+filho(F,P) :: (solucoes((F,P),(filho( F,P )), S),
++filho(F,P) :: (solucoes((F,P),filho( F,P ), S),
 				comprimento( S,N ), N == 1
 				).
 
-+natural(I,L) :: (solucoes((I,L),(natural( I,L )), S),
++natural(I,L) :: (solucoes((I,L),natural( I,L ), S),
 				comprimento( S,N ), N == 1
 				).
 
@@ -38,11 +38,11 @@
 % Invariante Referencial: nao admitir mais do que 2 progenitores
 %                         para um mesmo individuo
 
-+filho( F,P ) :: (soluccoes( Ps, (filho(F, Ps)), S ),
++filho( F,P ) :: (solucoes( (Ps), filho(F, Ps), S ),
 				 comprimento( S,N ), N =< 2
 				 ).
 
-+natural( I,L ) :: (soluccoes( Ls, (natural(I, Ls)), S ),
++natural( I,L ) :: (solucoes( (Ls), natural(I, Ls), S ),
 				 comprimento( S,N ), N == 1
 				 ).
 
@@ -164,7 +164,7 @@ construir(Solucoes) :-
 		Solucoes=[Y | Resto], construir(Resto)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Extensão do predicado que permite a evolucao do conhecimento
+% Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
 	solucoes( Invariante, +Termo::Invariante, Lista),
@@ -176,20 +176,29 @@ insercao(Termo) :-
 insercao(Termo)	:-
 	retract(Termo), !, fail .
 
-removerConhecimento(Termo) :-
-	solucoes( Invariante, +Termo::Invariante, Lista),
-	remocao(Termo),
-	teste( Lista ).
-
-remocao(Termo) :-
-	retract(Termo) .
-remocao(Termo)	:-
-	assert(Termo), !, fail .	
-
 teste([]) .
 teste([H|T]) :-
-	H, teste(T) .
+	H, teste(T) .	
 
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
+
+%removerConhecimento(Termo) :-
+%	solucoes( Invariante, -Termo::Invariante, Lista),
+%	teste( Lista ),
+%	remocao(Termo) .
+%
+%remocao(Termo) :-
+%	retract(Termo) .
+%remocao(Termo)	:-
+%	assert(Termo), !, fail .
+
+
+removerConhecimento(Termo) :-
+	remocao(Termo) .
+
+remocao(Termo) :-
+	retract(Termo).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
