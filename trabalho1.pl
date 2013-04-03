@@ -26,10 +26,17 @@
 
 % Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
++filho(F,P) :: (solucoes((F,P),(filho( F,P )), S),
+				comprimento( S,N ), N == 1
+				).
+
 
 % Invariante Referencial: nao admitir mais do que 2 progenitores
 %                         para um mesmo individuo
 
++filho( F,P ) :: (soluccoes( Ps, (filho(F, Ps)), S ),
+				 comprimento( S,N ), N =< 2
+				 ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
@@ -168,6 +175,7 @@ teste([H|T]) :-
 	H, teste(T) .
 
 
+<<<<<<< HEAD
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
 
@@ -175,3 +183,5 @@ comprimento([], 0) .
 comprimento([H|T], R) :-
 	comprimento(T, X),
 	R is 1+X .
+=======
+>>>>>>> HOLA BITHCES
