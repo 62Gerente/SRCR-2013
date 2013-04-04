@@ -71,27 +71,35 @@ filho(maria,telmo).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado pai: Pai,Filho -> {V,F}
 
-pai( P,F ) :- filho( F,P ).
+pai( P,F ) :- 
+	filho( F,P ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado tio: Tio,Sobrinho -> {V,F}
 
-tio(T,S) :- irmao(T,X), filho(S,X).
+tio(T,S) :- 
+	irmao(T,X), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado sobrinho: Sobrinho,Tio -> {V,F}
 
-sobrinho(S,T) :- tio(T,S).
+sobrinho(S,T) :- 
+	tio(T,S).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
 
-primo(P1, P2) :- filho(P1,X), tio(X,P2).
+primo(P1, P2) :- 
+	filho(P1,X), 
+	tio(X,P2).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
 
-irmao(I1, I2) :- filho(I1,X), filho(I2,X), I1 \== I2.
+irmao(I1, I2) :- 
+	filho(I1,X), 
+	filho(I2,X), 
+	I1 \== I2.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
@@ -120,27 +128,42 @@ bisavo(B, N) :-
 bisneto(N, B) :-
 	bisavo(B, N) .
 
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado casado: C1,C2 -> {V,F}
+
+casado(C1, C2) :-
+	filho(X,C1),
+	filho(X,C2).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente -> {V,F}
 
-descendente(D,A) :- filho(D,A);filho(D,N),descendente(N,A).
+descendente(D,A) :- 
+	filho(D,A);
+	filho(D,N),
+	descendente(N,A).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente,Grau -> {V,F}
 
-descendente(D,A,1) :- filho(D,A).
-descendente(D,A,Z) :- filho(D,N),descendente(N,A,G), Z is G+1.
+descendente(D,A,1) :- 
+	filho(D,A).
+descendente(D,A,Z) :- 
+	filho(D,N),
+	descendente(N,A,G), 
+	Z is G+1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente -> {V,F}
 
-ascendente(A,D) :- descendente(D,A).
+ascendente(A,D) :- 
+	descendente(D,A).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente,Grau -> {V,F}
 
-ascendente(A,D,Z) :- descendente(D,A,Z).
+ascendente(A,D,Z) :- 
+	descendente(D,A,Z).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado nao: Questao -> {V,F}
@@ -154,14 +177,18 @@ nao(Questao) .
 % Extensão do predicado solucoes: X,Teorema,Solucoes -> {V, F}
 
 solucoes(X, Teorema, Solucoes) :-
-	Teorema, assert(temp(X)), fail. 
+	Teorema, 
+	assert(temp(X)), 
+	fail. 
 solucoes(X, Teorema, Solucoes) :-
-	assert(temp(fim)), construir(Solucoes).
+	assert(temp(fim)), 
+	construir(Solucoes).
 
 construir(Solucoes) :-
 	retract(temp(Y)), !,
 		(Y==fim, !, Solucoes=[];
-		Solucoes=[Y | Resto], construir(Resto)).
+		Solucoes=[Y | Resto], 
+		construir(Resto)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
@@ -207,3 +234,29 @@ comprimento([], 0) .
 comprimento([H|T], R) :-
 	comprimento(T, X),
 	R is 1+X .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado relacao: I1, I2, R -> {V, F}
+
+relacao(I1,I2, filho) :-
+	 filho(I1,I2). 
+relacao(I1,I2, pai) :-
+	 pai(I1,I2). 
+relacao(I1,I2, tio) :-
+	 tio(I1,I2). 
+relacao(I1,I2, sobrinho) :-
+	 sobrinho(I1,I2). 
+relacao(I1,I2, avo) :-
+	 avo(I1,I2). 
+relacao(I1,I2, neto) :-
+	 neto(I1,I2). 
+relacao(I1,I2, bisavo) :-
+	 bisavo(I1,I2). 
+relacao(I1,I2, bisneto) :-
+	 bisneto(I1,I2).
+relacao(I1,I2, casado) :-
+	 casado(I1,I2). 
+relacao(I1,I2, irmao) :-
+	 irmao(I1,I2). 
+relacao(I1,I2, primo) :-
+	 primo(I1,I2). 
