@@ -35,8 +35,8 @@
 				).
 
 
-% Invariante Referencial: nao admitir mais do que 2 progenitores
-%                         para um mesmo individuo
+% Invariante Referencial: 
+%                         
 
 +filho( F,P ) :: (solucoes( (Ps), filho(F, Ps), S ),
 				 comprimento( S,N ), N =< 2
@@ -46,6 +46,9 @@
 				 comprimento( S,N ), N == 1
 				 ).
 
++filho( F,P ) :: (descendente(P,F,N),
+				 N==0
+				 ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
