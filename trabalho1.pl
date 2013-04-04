@@ -46,9 +46,7 @@
 				 comprimento( S,N ), N == 1
 				 ).
 
-+filho( F,P ) :: (descendente(P,F,N),
-				 N==0
-				 ).
++filho( F,P ) :: nao(descendente(P,F,N)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
@@ -262,4 +260,11 @@ relacao(I1,I2, casado) :-
 relacao(I1,I2, irmao) :-
 	 irmao(I1,I2). 
 relacao(I1,I2, primo) :-
-	 primo(I1,I2). 
+	 primo(I1,I2).
+relacao(I1,I2, Z) :-
+	 descendente(I1,I2,N), 
+	 Z = descendente\ de\ grau\ N.
+relacao(I1,I2, Z) :-
+	 ascencente(I1,I2,N),
+	 Z = ascendente\ de\ grau\ N.
+relacao(I1,I2,desconhecido). 
