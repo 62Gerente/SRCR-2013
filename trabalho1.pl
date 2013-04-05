@@ -100,7 +100,8 @@ tio(T,S) :-
 
 tios(I, R) :-
 	solucoes(T, tio(T, I), S),
-	R = S .	
+	eliminarRepetidos(S, R_e_r),
+	R = R_e_r .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado sobrinho: Sobrinho,Tio -> {V,F}
@@ -113,7 +114,8 @@ sobrinho(S,T) :-
 
 sobrinhos(I, R) :-
 	solucoes(Sobr, sobrinho(Sobr, I), S),
-	R = S .	
+	eliminarRepetidos(S, R_e_r),
+	R = R_e_r .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
@@ -127,7 +129,8 @@ primo(P1, P2) :-
 
 primos(I, R) :-
 	solucoes(Pr, primo(Pr, I), S),
-	R = S .
+	eliminarRepetidos(S, R_e_r),
+	R = R_e_r .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
@@ -142,7 +145,8 @@ irmao(I1, I2) :-
 
 irmaos(I, R) :-
 	solucoes(Irm, irmao(Irm, I), S),
-	R = S .	
+	eliminarRepetidos(S, R_e_r),
+	R = R_e_r .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
@@ -393,3 +397,24 @@ relacao(I1,I2, Z) :-
 	 ascencente(I1,I2,N),
 	 Z = ascendente\ de\ grau\ N.
 relacao(I1,I2,desconhecido). 
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado eliminarRepetidos: L, R -> {V, F}
+
+eliminarRepetidos([], []) .
+eliminarRepetidos([H|T], Res) :-
+	eliminarElemento(T, H, R_e_elem),
+	eliminarRepetidos(R_e_elem, R_e_rep),
+	Res = [H|R_e_rep] .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado eliminarElemento: L, E, R -> {V, F}	
+
+eliminarElemento([], _, []).
+eliminarElemento([H|T], H, Res) :-
+	eliminarElemento(T, H, R_e_elem),
+	Res = R_e_elem .
+eliminarElemento([H|T], E, Res)	:-
+	H \== E,
+	eliminarElemento(T, E, R_e_elem),
+	Res = [H|R_e_elem] .
