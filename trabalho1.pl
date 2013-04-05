@@ -155,6 +155,13 @@ descendente(D,A,Z) :-
 	Z is G+1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado descendenteAteGrau: Descendente,Ascendente,Grau -> {V,F}
+
+descendenteAteGrau(D,A,N) :- 
+	descendente(D,A,Z), 
+	Z=<N.
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente -> {V,F}
 
 ascendente(A,D) :- 
@@ -165,6 +172,12 @@ ascendente(A,D) :-
 
 ascendente(A,D,Z) :- 
 	descendente(D,A,Z).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado descendenteAteGrau: Ascendente,Descendente,Grau -> {V,F}
+
+ascendenteAteGrau(D,A,N) :- 
+	 descendenteAteGrau(A,D,N).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado nao: Questao -> {V,F}
