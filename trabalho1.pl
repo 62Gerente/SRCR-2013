@@ -70,10 +70,24 @@ filho(maria,fatima).
 filho(maria,telmo).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado filhos: Individuo, Resultado -> {V,F}
+
+filhos(I, R) :-
+	solucoes(F, filho(F, I), S),
+	R = S .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado pai: Pai,Filho -> {V,F}
 
 pai( P,F ) :- 
 	filho( F,P ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado pais: Individuo, Resultado -> {V,F}
+
+pais(I, R) :-
+	solucoes(P, pai(P, I), S),
+	R = S .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado tio: Tio,Sobrinho -> {V,F}
@@ -82,10 +96,24 @@ tio(T,S) :-
 	irmao(T,X), filho(S,X).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado tios: Individuo, Resultado -> {V,F}
+
+tios(I, R) :-
+	solucoes(T, tio(T, I), S),
+	R = S .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado sobrinho: Sobrinho,Tio -> {V,F}
 
 sobrinho(S,T) :- 
 	tio(T,S).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado sobrinhos: Individuo, Resultado -> {V,F}
+
+sobrinhos(I, R) :-
+	solucoes(Sobr, sobrinho(Sobr, I), S),
+	R = S .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado primo: Primo,Primo -> {V,F}
@@ -93,6 +121,13 @@ sobrinho(S,T) :-
 primo(P1, P2) :- 
 	filho(P1,X), 
 	tio(X,P2).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado primos: Individuo, Resultado -> {V,F}
+
+primos(I, R) :-
+	solucoes(Pr, primo(Pr, I), S),
+	R = S .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado irmao: Irmao,Irmao -> {V,F}
@@ -103,6 +138,13 @@ irmao(I1, I2) :-
 	I1 \== I2.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado irmaos: Individuo, Resultado -> {V,F}
+
+irmaos(I, R) :-
+	solucoes(Irm, irmao(Irm, I), S),
+	R = S .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado avo: Avo,Neto -> {V,F}
 
 avo(A, N) :- 
@@ -110,10 +152,24 @@ avo(A, N) :-
 	filho(N, X) .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado avos: Individuo, Resultado -> {V,F}
+
+avos(I, R) :-
+	solucoes(A, avo(A, I), S),
+	R = S .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado neto: Neto,Avo -> {V,F}
 
 neto(N, A) :-
 	avo(A, N) .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado netos: Individuo, Resultado -> {V,F}
+
+netos(I, R) :-
+	solucoes(N, neto(N, I), S),
+	R = S .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado bisavo: Bisavo,Bisneto -> {V,F}
@@ -124,10 +180,24 @@ bisavo(B, N) :-
 	filho(N, Y).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado bisavos: Individuo, Resultado -> {V,F}
+
+bisavos(I, R) :-
+	solucoes(Ba, bisavo(Ba, I), S),
+	R = S .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado bisneto: Bisneto,Bisavo -> {V,F}
 
 bisneto(N, B) :-
 	bisavo(B, N) .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado bisnetos: Individuo, Resultado -> {V,F}
+
+bisnetos(I, R) :-
+	solucoes(Bn, bisneto(Bn, I), S),
+	R = S .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado casado: C1,C2 -> {V,F}
@@ -145,6 +215,13 @@ descendente(D,A) :-
 	descendente(N,A).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado descendentes: Individuo, Resultado -> {V,F}
+
+descendentes(I, R) :-
+	solucoes(D, descendente(D, I), S),
+	R = S .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendente: Descendente,Ascendente,Grau -> {V,F}
 
 descendente(D,A,1) :- 
@@ -155,11 +232,25 @@ descendente(D,A,Z) :-
 	Z is G+1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado descendentes: Individuo, Grau, Resultado -> {V,F}
+
+descendentes(I, G, R) :-
+	solucoes(D, descendente(D, I, G), S),
+	R = S .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado descendenteAteGrau: Descendente,Ascendente,Grau -> {V,F}
 
 descendenteAteGrau(D,A,N) :- 
 	descendente(D,A,Z), 
 	Z=<N.
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado descendentesAteGrau: Individuo, Grau, Resultado -> {V,F}
+
+descendentesAteGrau(I, G, R) :-
+	solucoes(D, descendenteAteGrau(D, I, G), S),
+	R = S .	
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente -> {V,F}
@@ -168,16 +259,37 @@ ascendente(A,D) :-
 	descendente(D,A).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado ascendentes: Individuo, Resultado -> {V,F}
+
+ascendentes(I, R) :-
+	solucoes(A, ascendente(A, I), S),
+	R = S .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado ascendente: Ascendente,Descendente,Grau -> {V,F}
 
 ascendente(A,D,Z) :- 
 	descendente(D,A,Z).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Extensao do predicado descendenteAteGrau: Ascendente,Descendente,Grau -> {V,F}
+% Extensao do predicado ascendentes: Individuo, Grau, Resultado -> {V,F}
+
+ascendentes(I, G, R) :-
+	solucoes(A, ascendente(A, I, G), S),
+	R = S .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado ascendenteAteGrau: Ascendente,Descendente,Grau -> {V,F}
 
 ascendenteAteGrau(D,A,N) :- 
 	 descendenteAteGrau(A,D,N).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do predicado ascendentesAteGrau: Individuo, Grau, Resultado -> {V,F}
+
+ascendentesAteGrau(I, G, R) :-
+	solucoes(A, ascendenteAteGrau(A, I, G), S),
+	R = S .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado nao: Questao -> {V,F}
