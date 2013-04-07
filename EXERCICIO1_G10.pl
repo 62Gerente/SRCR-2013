@@ -51,23 +51,44 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filho: Filho,Pai -> {V,F}
 
-filho(zacarias,zeca).
-filho(zacarias,tina).
+filho(vito, antonio).
+filho(vito, signora).
 
-filho(fatima,zeca).
-filho(fatima,tina).
+filho(michael, vito).
+filho(michael, carmelia).
 
-filho(zecaj,lena).
-filho(zecaj,zacarias).
+filho(sonny, vito).
+filho(sonny, carmelia).
 
-filho(alice,zecaj).
-filho(alice,susana).
+filho(connie, vito).
+filho(connie, carmelia).
 
-filho(marcos,fatima).
-filho(marcos,telmo).
+filho(fredo, vito).
+filho(fredo, carmelia).
 
-filho(maria,fatima).
-filho(maria,telmo).
+filho(anthony, michae).
+filho(anthony, key).
+
+filho(mary, michael).
+filho(mary, key).
+
+filho(vincent, sonny).
+filho(vincent, lucy).
+
+filho(santino, sonny).
+filho(santino, sandra).
+
+filho(francessa, sonny).
+filho(francessa, sandra).
+
+filho(frank, sonny).
+filho(frank, sandra).
+
+filho(victor, connie).
+filho(victor, carlos).
+
+filho(michaelf, connie).
+filho(michaelf, carlos).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado filhos: Individuo, Resultado -> {V,F}
