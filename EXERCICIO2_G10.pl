@@ -35,11 +35,15 @@ indicacoes_terapeuticas('ben-u-ron','Dores de dentes').
 
 -indicacoes_terapeuticas('ben-u-ron','Queimaduras').
  
+-indicacoes_terapeuticas(A,B) :- nao(indicacoes_terapeuticas(A,B)), nao(excepcao(indicacoes_terapeuticas(A,B))).
+
 % Extensao do predicado principio_activo: Medicamento,Substancia -> {V,F,D}
 
 principio_activo('ben-u-ron','Paracetamol').
 
 -principio_activo(M,S) :- principio_activo(M,X).  % S=!X
+
+-principio_activo(A,B) :- nao(principio_activo(A,B)), nao(excepcao(principio_activo(A,B))).
 
 % Extensao do predicado apresentacao_farmaceutica: Medicamento,Apresentacao -> {V,F,D}
 
@@ -48,24 +52,36 @@ apresentacao_farmaceutica('ben-u-ron','Xarope').
 
 -apresentacao_farmaceutica('ben-u-ron','Pensos').
 
+-apresentacao_farmaceutica(A,B) :- nao(apresentacao_farmaceutica(A,B)), nao(excepcao(apresentacao_farmaceutica(A,B))).
+
 % Extensao do predicado aplicacao_clinica: Medicamento,Aplicacao -> {V,F,D}
 
 aplicacao_clinica(M,A) :- indicacoes_terapeuticas(M,A).
 
 aplicacao_clinica('ben-u-ron','Sonolencia').
 
+-aplicacao_clinica(A,B) :- nao(aplicacao_clinica(A,B)), nao(excepcao(aplicacao_clinica(A,B))).
+
 % Extensao do predicado armario: Nome,Apresentacao -> {V,F,D}
 
-armario('C A-G','Comprimidos').
+armario('Armario 1','Comprimidos').
+
+-armario(A,B) :- nao(armario(A,B)), nao(armario(local(A,B))).
 
 % Extensao do predicado prateleira: Nome, Armario -> {V,F,D}
 
-prateleira('C A-C','C A-G').
-prateleira('C D-F','C A-G').
+prateleira('A','Armario 1').
+prateleira('B','Armario 1').
 
-% Estensao do predicado esta_prateleira: Medicamento, Armario, Prateleira -> {V,F,D}
+-prateleira(A,B) :- nao(prateleira(A,B)), nao(excepcao(prateleira(A,B))).
 
-local('ben-u-ron','C A-G','C A-C').
+% Estensao do predicado local: Medicamento, Armario, Prateleira -> {V,F,D}
+
+local('ben-u-ron','Armario 1', incerto).
+
+excepcao(local(A,B,C)) :- local(A, B, incerto).
+
+-local(A,B,C) :- nao(local(A,B,C)), nao(excepcao(local(A,B,C))).
 
 % Extensao do meta-predicado demo: Questao,Resposta -> {V,F}
 
