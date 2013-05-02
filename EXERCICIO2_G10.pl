@@ -36,11 +36,11 @@
 :- dynamic data_validade/4.
 :- dynamic data_introducao/4.
 
-% Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
+% _________ Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
 % NAO DEIXAR INSERIR CONHECIMENTO REPETIDO EM TODOS
 
-% Invariante Referencial
+% _________ Invariante Referencial
 
 % SO UM PRINCIPIO ACTIVO POR MEDICAMENTO
 % SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO)
@@ -51,15 +51,20 @@
 % NAO PODE ESTAR EM MAIS QUE UMA PRATELEIRA DO MESMO ARMARIO ????????
 % VERIFICAR LETRA ARMARIO MEDICAMENTO ?????????
 
-% FALTA
+% _________________FALTA___________________________
 
 % PREDICADOS: indicacoes_terapeuticas, apresentacoes_terapeuticas, aplicacoes_clinicas, locais, precos, datas... bla bla
 % PREDICADOS: preco (MEDICAMENTO,APRESENTACAO,ESCALAO) -> dá o preco do regime especial para o escalao, se o escalao nao existir da o preco publico
 % ACRESCENTAR APRESENTACAO NOS PRECOS,DATAS,REGIMES ESPECIAIS,(LOCAL?)
+% DADOS TESTE E ARRANJAR UMA MANEIRA DE OS REPRESENTAR NO RELATORIO
 
-% DUVIDAS
+% MAIS CASOS DE CONHECIMENTO INCERTO? EX: REGIME_ESPECIAL(A,INCERTO,INCERTO)???????????????????
+
+% _________________DUVIDAS_________________________
 
 % LISTA DE DATAS PARA O MESMO MEDICAMENTO E APRESENTACAO ????
+
+
 
 
 % Extensao do predicado medicamento: Nome -> {V,F,D}
