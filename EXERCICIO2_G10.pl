@@ -36,6 +36,32 @@
 :- dynamic data_validade/4.
 :- dynamic data_introducao/4.
 
+% Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
+
+% NAO DEIXAR INSERIR CONHECIMENTO REPETIDO EM TODOS
+
+% Invariante Referencial
+
+% SO UM PRINCIPIO ACTIVO POR MEDICAMENTO
+% SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO)
+% NAO PODE ESTAR EM MAIS ARMARIOS QUE APRESENTACOES FARMACEUTICAS
+% DATA VALIDADE > DATA INTRODUCAO
+
+
+% NAO PODE ESTAR EM MAIS QUE UMA PRATELEIRA DO MESMO ARMARIO ????????
+% VERIFICAR LETRA ARMARIO MEDICAMENTO ?????????
+
+% FALTA
+
+% PREDICADOS: indicacoes_terapeuticas, apresentacoes_terapeuticas, aplicacoes_clinicas, locais, precos, datas... bla bla
+% PREDICADOS: preco (MEDICAMENTO,APRESENTACAO,ESCALAO) -> dá o preco do regime especial para o escalao, se o escalao nao existir da o preco publico
+% ACRESCENTAR APRESENTACAO NOS PRECOS,DATAS,REGIMES ESPECIAIS,(LOCAL?)
+
+% DUVIDAS
+
+% LISTA DE DATAS PARA O MESMO MEDICAMENTO E APRESENTACAO ????
+
+
 % Extensao do predicado medicamento: Nome -> {V,F,D}
 
 medicamento('ben-u-ron').
@@ -169,4 +195,76 @@ demo( Questao,desconhecido ) :-
 nao( Questao ) :-
     Questao, !, fail.
 nao( Questao ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado solucoes: X,Teorema,Solucoes -> {V, F}
+
+solucoes(X, Teorema, Solucoes) :-
+	Teorema, 
+	assert(temp(X)), 
+	fail. 
+solucoes(X, Teorema, Solucoes) :-
+	assert(temp(fim)), 
+	construir(Solucoes).
+
+construir(Solucoes) :-
+	retract(temp(Y)), !,
+		(Y==fim, !, Solucoes=[];
+		Solucoes=[Y | Resto], 
+		construir(Resto)).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
+
+inserirConhecimento(Termo) :-
+	solucoes( Invariante, +Termo::Invariante, Lista),
+	insercao(Termo),
+	teste( Lista ).
+
+insercao(Termo) :-
+	assert(Termo) .
+insercao(Termo)	:-
+	retract(Termo), !, fail .
+
+teste([]) .
+teste([H|T]) :-
+	H, teste(T) .	
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
+
+removerConhecimento(Termo) :-
+	remocao(Termo) .
+
+remocao(Termo) :-
+	retract(Termo).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado comprimento: L, R -> {V, F}
+
+comprimento([], 0) .
+comprimento([H|T], R) :-
+	comprimento(T, X),
+	R is 1+X .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado eliminarRepetidos: L, R -> {V, F}
+
+eliminarRepetidos([], []) .
+eliminarRepetidos([H|T], Res) :-
+	eliminarElemento(T, H, R_e_elem),
+	eliminarRepetidos(R_e_elem, R_e_rep),
+	Res = [H|R_e_rep] .
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado eliminarElemento: L, E, R -> {V, F}	
+
+eliminarElemento([], _, []).
+eliminarElemento([H|T], H, Res) :-
+	eliminarElemento(T, H, R_e_elem),
+	Res = R_e_elem .
+eliminarElemento([H|T], E, Res)	:-
+	H \== E,
+	eliminarElemento(T, E, R_e_elem),
+	Res = [H|R_e_elem] .
 
