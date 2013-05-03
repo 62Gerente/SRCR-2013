@@ -30,15 +30,65 @@
 :- dynamic armario/2.
 :- dynamic prateleira/2.
 :- dynamic local/3.
-:- dynamic preco_recomendado/2.
-:- dynamic preco_publico/2.
-:- dynamic regime_especial/3.
-:- dynamic data_validade/4.
-:- dynamic data_introducao/4.
+:- dynamic preco_recomendado/3.
+:- dynamic preco_publico/3.
+:- dynamic regime_especial/4.
+:- dynamic data_validade/5.
+:- dynamic data_introducao/5.
 
-% _________ Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
+% Invariante Estrutural:  nao permitir a insercao de conhecimento repetido
 
-% NAO DEIXAR INSERIR CONHECIMENTO REPETIDO EM TODOS
++medicamento(M) :: (solucoes((M),medicamento( M ), S),
+				comprimento( S,N ), N == 1
+				).
+
++indicacao_terapeutica(M,I) :: (solucoes((M,I),indicacao_terapeutica( M,I ), S),
+				comprimento( S,N ), N == 1
+				).
+
++principio_activo(M,S) :: (solucoes((M,S),principio_activo( M,S ), S),
+				comprimento( S,N ), N == 1
+				).
+
++apresentacao_farmaceutica(M,A) :: (solucoes((M,A),apresentacao_farmaceutica( M,A ), S),
+				comprimento( S,N ), N == 1
+				).
+
++aplicacao_clinica(M,A) :: (solucoes((M,A),aplicacao_clinica( M,A ), S),
+				comprimento( S,N ), N == 1
+				).
+
++armario(X,A) :: (solucoes((X,A),armario( X,A ), S),
+				comprimento( S,N ), N == 1
+				).
+
++prateleira(P,A) :: (solucoes((P,A),prateleira( P,A ), S),
+				comprimento( S,N ), N == 1
+				).
+
++local(M,A,P) :: (solucoes((M,A,P),local( M,A,P ), S),
+				comprimento( S,N ), N == 1
+				).
+
++preco_recomendado(M,A,P) :: (solucoes((M,A,P),preco_recomendado( M,A,P ), S),
+				comprimento( S,N ), N == 1
+				).
+
++preco_publico(M,A,P) :: (solucoes((M,A,P),preco_publico( M,A,P ), S),
+				comprimento( S,N ), N == 1
+				).
+
++regime_especial(M,A,E,P) :: (solucoes((M,A,E,P),regime_especial( M,A,E,P ), S),
+				comprimento( S,N ), N == 1
+				).
+
++data_validade(X,A,D,M,A) :: (solucoes((X,A,D,M,A),data_validade( X,A,D,M,A ), S),
+				comprimento( S,N ), N == 1
+				).
+
++data_introducao(X,A,D,M,A) :: (solucoes((X,A,D,M,A),data_introducao( X,A,D,M,A ), S),
+				comprimento( S,N ), N == 1
+				).
 
 % _________ Invariante Referencial
 
@@ -55,7 +105,7 @@
 
 % PREDICADOS: indicacoes_terapeuticas, apresentacoes_terapeuticas, aplicacoes_clinicas, locais, precos, datas... bla bla
 % PREDICADOS: preco (MEDICAMENTO,APRESENTACAO,ESCALAO) -> dá o preco do regime especial para o escalao, se o escalao nao existir da o preco publico
-% ACRESCENTAR APRESENTACAO NOS PRECOS,DATAS,REGIMES ESPECIAIS,(LOCAL?)
+% ACRESCENTAR APRESENTACAO NO (LOCAL?)
 % DADOS TESTE E ARRANJAR UMA MANEIRA DE OS REPRESENTAR NO RELATORIO
 
 % MAIS CASOS DE CONHECIMENTO INCERTO? EX: REGIME_ESPECIAL(A,INCERTO,INCERTO)???????????????????
@@ -136,53 +186,60 @@ excepcao(local(A,B,C)) :- local(A, incerto, C).
 excepcao(local(A,B,C)) :- local(incerto, B, C).
 -local(A,B,C) :- nao(local(A,B,C)), nao(excepcao(local(A,B,C))).
 
-% Estensao do predicado preco_recomendado: Medicamento, Preco -> {V,F,D}
+% Estensao do predicado preco_recomendado: Medicamento, Apresentacao, Preco -> {V,F,D}
 
-excepcao(preco_recomendado('ben-u-ron', P)) :- P>=7.5, p<=10.
+excepcao(preco_recomendado('ben-u-ron', 'Comprimidos', P)) :- P>=7.5, p<=10.
+preco_recomendado('ben-u-ron', 'Xarope' 12).
 
-excepcao(preco_recomendado(A,B)) :- preco_recomendado(A,incerto).
-excepcao(preco_recomendado(A,B)) :- preco_recomendado(incerto,B).
--preco_recomendado(A,B) :- nao(preco_recomendado(A,B)), nao(excepcao(preco_recomendado(A,B))).
+excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,incerto,C).
+excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(incerto,B,C).
+excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
+-preco_recomendado(A,B,C) :- nao(preco_recomendado(A,B,C)), nao(excepcao(preco_recomendado(A,B,C))).
 
-% Estensao do predicado preco_publico: Medicamento, Preco -> {V,F,D}
+% Estensao do predicado preco_publico: Medicamento, Apresentacao, Preco -> {V,F,D}
 
-excepcao(preco_publico('ben-u-ron', P)) :- P>=9, p<=10.
+excepcao(preco_publico('ben-u-ron', 'Comprimidos', P)) :- P>=9, p<=10.
+preco_publico('ben-u-ron', incerto, 5).
 
-excepcao(preco_publico(A,B)) :- preco_publico(A,incerto).
-excepcao(preco_publico(A,B)) :- preco_publico(incerto,B).
--preco_publico(A,B) :- nao(preco_publico(A,B)), nao(excepcao(preco_publico(A,B))).
+excepcao(preco_publico(A,B,C)) :- preco_publico(A,incerto,C).
+excepcao(preco_publico(A,B,C)) :- preco_publico(incerto,B,C).
+excepcao(preco_publico(A,B,C)) :- preco_publico(A,B,incerto).
+-preco_publico(A,B,C) :- nao(preco_publico(A,B,C)), nao(excepcao(preco_publico(A,B,C))).
 
-% Estensao do predicado regime_especial: Medicamento, Escalao, Preco -> {V,F,D}
+% Estensao do predicado regime_especial: Medicamento, Apresentacao, Escalao, Preco -> {V,F,D}
 
-regime_especial('ben-u-ron', A, 3).
-regime_especial('ben-u-ron', B, incerto).
+regime_especial('ben-u-ron', 'Comprimidos', A, 3).
+regime_especial('ben-u-ron', 'Comprimidos', B, incerto).
 
-excepcao(regime_especial(A,B,C)) :- regime_especial(A, B, incerto).
-excepcao(regime_especial(A,B,C)) :- regime_especial(A, incerto, C).
-excepcao(regime_especial(A,B,C)) :- regime_especial(incerto, B, C).
--regime_especial(A,B,C) :- nao(regime_especial(A,B,C)), nao(excepcao(regime_especial(A,B,C))).
+excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, incerto, D).
+excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, incerto, C, D).
+excepcao(regime_especial(A,B,C,D)) :- regime_especial(incerto, B, C, D).
+excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, incerto).
+-regime_especial(A,B,C,D) :- nao(regime_especial(A,B,C,D)), nao(excepcao(regime_especial(A,B,C,D))).
 
-% Estensao do predicado data_validade: Medicamento, Dia, Mes, Ano -> {V,F,D}
+% Estensao do predicado data_validade: Medicamento, Apresentacao, Dia, Mes, Ano -> {V,F,D}
 
-data_validade('ben-u-ron', 23, 10, 2013).
+data_validade('ben-u-ron', 'Comprimidos', 23, 10, 2013).
 
-excepcao(data_validade(A,B,C,D)) :- data_validade(A,B,C,incerto).
-excepcao(data_validade(A,B,C,D)) :- data_validade(A,B,incerto,D).
-excepcao(data_validade(A,B,C,D)) :- data_validade(A,incerto,C,D).
-excepcao(data_validade(A,B,C,D)) :- data_validade(incerto,B,C,D).
-excepcao(data_validade(A,B,C,D)) :- data_validade(A,incerto,incerto,incerto).
--data_validade(A,B,C,D) :- nao(data_validade(A,B,C,D)), nao(excepcao(data_validade(A,B,C,D))).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,C,incerto,E).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,D,E).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,incerto,C,D,E).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(incerto,B,C,D,E).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,C,D,incerto).
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,incerto,incerto).
+-data_validade(A,B,C,D,E) :- nao(data_validade(A,B,C,D,E)), nao(excepcao(data_validade(A,B,C,D,E))).
 
-% Estensao do predicado data_introducao: Medicamento, Dia, Mes, Ano -> {V,F,D}
+% Estensao do predicado data_introducao: Medicamento, Apresentacao, Dia, Mes, Ano -> {V,F,D}
 
-data_introducao('ben-u-ron', 23, 02, 2013).
+data_introducao('ben-u-ron', 'Comprimidos', 23, 02, 2013).
 
-excepcao(data_introducao(A,B,C,D)) :- data_introducao(A,B,C,incerto).
-excepcao(data_introducao(A,B,C,D)) :- data_introducao(A,B,incerto,D).
-excepcao(data_introducao(A,B,C,D)) :- data_introducao(A,incerto,C,D).
-excepcao(data_introducao(A,B,C,D)) :- data_introducao(incerto,B,C,D).
-excepcao(data_introducao(A,B,C,D)) :- data_introducao(A,incerto,incerto,incerto).
--data_introducao(A,B,C,D) :- nao(data_introducao(A,B,C,D)), nao(excepcao(data_introducao(A,B,C,D))).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,C,incerto,E).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,incerto,D,E).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,incerto,C,D,E).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(incerto,B,C,D,E).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,C,D,incerto).
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,incerto,incerto,incerto).
+-data_introducao(A,B,C,D,E) :- nao(data_introducao(A,B,C,D,E)), nao(excepcao(data_introducao(A,B,C,D,E))).
 
 % Extensao do meta-predicado demo: Questao,Resposta -> {V,F}
 
