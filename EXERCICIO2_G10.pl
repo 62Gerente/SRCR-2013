@@ -90,13 +90,36 @@
 				comprimento( S,N ), N == 1
 				).
 
-% _________ Invariante Referencial
+% Invariante Referencial
 
 % SO UM PRINCIPIO ACTIVO POR MEDICAMENTO
-% SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO)
-% NAO PODE ESTAR EM MAIS ARMARIOS QUE APRESENTACOES FARMACEUTICAS
-% DATA VALIDADE > DATA INTRODUCAO
++principio_activo( M,P ) :: (solucoes( (Ps), principio_activo(M, Ps), S ),
+				 comprimento( S,N ), N == 1
+				 ).
 
+% SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO)
++local( M,A,P ) :: armario(A,X),aplicacao_clinica(M,X).
+
+% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR
+
++preco_recomendado(M,A,P) :: aplicacao_clinica(M,A).
++preco_publico(M,A,P) :: aplicacao_clinica(M,A).
++regime_especial(M,A,E,P) :: aplicacao_clinica(M,A). 
++data_validade(X,A,D,M,A) :: aplicacao_clinica(M,A).
++data_introducao(X,A,D,M,A) :: aplicacao_clinica(M,A).
+
+% DATA VALIDADE > DATA INTRODUCAO
++data_introducao( X,A,D,M,A ) :: 
+				( nao(data_validade(X,A,D2,M2,A2)) );
+				( A<A2 );
+				( A==A2, M<M2 );
+				( A==A2, M==M2, D<D2 ).
+
++data_validade( X,A,D,M,A ) :: 
+				( nao(data_introducao(X,A,D2,M2,A2)) );
+				( A>A2 );
+				( A==A2, M>M2 );
+				( A==A2, M==M2, D>D2 ).
 
 % NAO PODE ESTAR EM MAIS QUE UMA PRATELEIRA DO MESMO ARMARIO ????????
 % VERIFICAR LETRA ARMARIO MEDICAMENTO ?????????
@@ -113,8 +136,6 @@
 % _________________DUVIDAS_________________________
 
 % LISTA DE DATAS PARA O MESMO MEDICAMENTO E APRESENTACAO ????
-
-
 
 
 % Extensao do predicado medicamento: Nome -> {V,F,D}
