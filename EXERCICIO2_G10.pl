@@ -46,7 +46,7 @@
 				comprimento( S,N ), N == 1
 				).
 
-+principio_activo(M,S) :: (solucoes((M,S),principio_activo( M,S ), S),
++principio_activo(M,P) :: (solucoes((M,P),principio_activo( M,P ), S),
 				comprimento( S,N ), N == 1
 				).
 
