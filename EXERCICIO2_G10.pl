@@ -98,7 +98,7 @@
 				 ).
 
 % SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO)
-+local( M,A,P ) :: armario(A,X),aplicacao_clinica(M,X).
++local( M,A,P ) :: (armario(A,X),aplicacao_clinica(M,X)).
 
 % SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR
 
@@ -109,17 +109,17 @@
 +data_introducao(X,A,D,M,A) :: aplicacao_clinica(M,A).
 
 % DATA VALIDADE > DATA INTRODUCAO
-+data_introducao( X,A,D,M,A ) :: 
++data_introducao( X,A,D,M,A ) :: (
 				( nao(data_validade(X,A,D2,M2,A2)) );
 				( A<A2 );
 				( A==A2, M<M2 );
-				( A==A2, M==M2, D<D2 ).
+				( A==A2, M==M2, D<D2 )).
 
-+data_validade( X,A,D,M,A ) :: 
++data_validade( X,A,D,M,A ) :: (
 				( nao(data_introducao(X,A,D2,M2,A2)) );
 				( A>A2 );
 				( A==A2, M>M2 );
-				( A==A2, M==M2, D>D2 ).
+				( A==A2, M==M2, D>D2 )).
 
 % NAO PODE ESTAR EM MAIS QUE UMA PRATELEIRA DO MESMO ARMARIO ????????
 % VERIFICAR LETRA ARMARIO MEDICAMENTO ?????????
@@ -209,8 +209,8 @@ excepcao(local(A,B,C)) :- local(incerto, B, C).
 
 % Estensao do predicado preco_recomendado: Medicamento, Apresentacao, Preco -> {V,F,D}
 
-excepcao(preco_recomendado('ben-u-ron', 'Comprimidos', P)) :- P>=7.5, p<=10.
-preco_recomendado('ben-u-ron', 'Xarope' 12).
+excepcao(preco_recomendado('ben-u-ron', 'Comprimidos', P)) :- P>=7.5, P=<10.
+preco_recomendado('ben-u-ron', 'Xarope', 12).
 
 excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,incerto,C).
 excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(incerto,B,C).
@@ -219,7 +219,7 @@ excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
 
 % Estensao do predicado preco_publico: Medicamento, Apresentacao, Preco -> {V,F,D}
 
-excepcao(preco_publico('ben-u-ron', 'Comprimidos', P)) :- P>=9, p<=10.
+excepcao(preco_publico('ben-u-ron', 'Comprimidos', P)) :- P>=9, P=<10.
 preco_publico('ben-u-ron', incerto, 5).
 
 excepcao(preco_publico(A,B,C)) :- preco_publico(A,incerto,C).
