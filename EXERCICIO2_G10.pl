@@ -194,12 +194,13 @@ aplicacao_clinica(M,A) :- indicacao_terapeutica(M,A).
 
 aplicacao_clinica('ben-u-ron', 'Sonolencia').
 
-aplicacao_clinica('vibrocil', aplicacao_nula).
+%aplicacao_clinica('vibrocil', aplicacao_nula).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -aplicacao_clinica(A,B) :- nao(aplicacao_clinica(A,B)), nao(excepcao(aplicacao_clinica(A,B))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
+%excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(A, aplicacao_nula).
 excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(A,incerto).
 excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 
@@ -218,6 +219,7 @@ excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 armario('Armario 1', 'Comprimidos').
 armario('Armario 2', 'Xarope').
 armario('Armario 3', 'Gotas nasais').
+armario('Armario 4', incerto).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -armario(A,B) :- nao(armario(A,B)), nao(armario(local(A,B))).
@@ -243,6 +245,7 @@ prateleira('B','Armario 1').
 prateleira('C','Armario 1').
 prateleira('B','Armario 2').
 prateleira('V','Armario 3').
+prateleira('E', 'Armario 4').
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -prateleira(A,B) :- nao(prateleira(A,B)), nao(excepcao(prateleira(A,B))).
@@ -317,6 +320,8 @@ preco_recomendado('cegripe', 'Comprimidos', 4).
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(preco_recomendado('ben-u-ron', 'Comprimidos', P)) :- P>=7.5, P=<10.
 
+excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A, B, preco_nulo).
+
 excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,incerto,C).
 excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(incerto,B,C).
 excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
@@ -337,7 +342,6 @@ excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
 +preco_publico(M, A, P) :: (preco_publico(M, A, X),
                                nao(nulo(X))).
 
-
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 preco_publico('ben-u-ron', incerto, 5).
 
@@ -354,6 +358,7 @@ excepcao(preco_publico('ben-u-ron', 'Comprimidos', P)) :- P>=9, P=<10.
 
 excepcao(preco_publico('cegripe', 'Comprimidos', P)) :- P>=5, P=<7.
 
+excepcao(preco_publico(A,B,C)) :- preco_publico(A, B, preco_nulo).
 excepcao(preco_publico(A,B,C)) :- preco_publico(A,incerto,C).
 excepcao(preco_publico(A,B,C)) :- preco_publico(incerto,B,C).
 excepcao(preco_publico(A,B,C)) :- preco_publico(A,B,incerto).
@@ -394,6 +399,7 @@ regime_especial('cegripe', 'Comprimidos', 'B', 3).
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(regime_especial('brufen', 'Comprimidos', 'A', P)) :- P>=4, P=<6.
 
+excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, preco_nulo).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, incerto, D).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, incerto, C, D).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(incerto, B, C, D).
@@ -438,6 +444,7 @@ data_validade('cegripe', 'Comprimidos', 31, 12, 2015).
 -data_validade(A,B,C,D,E) :- nao(data_validade(A,B,C,D,E)), nao(excepcao(data_validade(A,B,C,D,E))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
+excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B, data_nula, data_nula, data_nula).
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,C,incerto,E).
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,D,E).
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,incerto,C,D,E).
@@ -484,6 +491,7 @@ data_introducao('cegripe', 'Comprimidos', data_nula, data_nula, data_nula).
 -data_introducao(A,B,C,D,E) :- nao(data_introducao(A,B,C,D,E)), nao(excepcao(data_introducao(A,B,C,D,E))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
+excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B, data_nula, data_nula, data_nula).
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,C,incerto,E).
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,incerto,D,E).
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,incerto,C,D,E).
