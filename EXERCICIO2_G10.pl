@@ -59,15 +59,22 @@
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+medicamento(M) :: (solucoes((M),medicamento( M ), S),
++medicamento(M) :: (findall((M),medicamento( M ), S),
                                 comprimento( S,N ), N == 1
                                 ).
+%% Não é possível remover o medicamento se houver dependências sobre este %%
+-medicamento(M) :: (-indicacao_terapeutica(M, I), -principio_activo(M, P),
+                      -apresentacao_farmaceutica(M, A), -aplicacao_clinica(M, C),
+                      -local(M, Arm, Pra), -preco_recomendado(M, Apresent, Preco_R),
+                      -preco_publico(M, Apresent_P, Preco_P), -regime_especial(M, Apresent_R_E, Esc, Preco_R_E),
+                      -data_introducao(M, Apr_D_I, Dia, Mes, Ano), -data_validade(M, Apr_D_V, Dia_V, Mes_V, Ano_V)).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 medicamento('ben-u-ron').
 medicamento('vibrocil').
 medicamento('brufen').
 medicamento('cegripe').
+medicamento('salofalk').
 
 %%%%%%%%%%  Conhecimento negativo %%%%%%%%%%
 -medicamento(M) :- nao(medicamento(M)), nao(excepcao(medicamento(M))).
@@ -81,12 +88,16 @@ medicamento('cegripe').
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+indicacao_terapeutica(M,I) :: (solucoes((M,I),indicacao_terapeutica( M,I ), S),
++indicacao_terapeutica(M,I) :: (findall((M,I),indicacao_terapeutica( M,I ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% Medicamento tem de existir  %%
 +indicacao_terapeutica(M,I) :: ( medicamento(M) ).
-
+%% Não permitir a inserção de valores que já sejam nulos %%
++indicacao_terapeutica(M, I) :: (findall((M, X),(indicacao_terapeutica(M, X), nulo(X)), Lista),
+                                comprimento( Lista, N ), N == 0
+                                ).
+                                
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 indicacao_terapeutica('ben-u-ron', 'Sindromes gripais').
 indicacao_terapeutica('ben-u-ron', 'Enxaquecas').
@@ -102,11 +113,15 @@ indicacao_terapeutica('brufen', 'Febre').
 
 indicacao_terapeutica('cegripe', 'Sindromes gripais').
 
+indicacao_terapeutica('salofalk', indicacao_nula).
+
 %%%%%%%%%%  Conhecimento negativo %%%%%%%%%%
 -indicacao_terapeutica(A,B) :- nao(indicacao_terapeutica(A,B)), nao(excepcao(indicacao_terapeutica(A,B))).
 % -indicacoes_terapeutica('ben-u-ron', 'Queimaduras').
 
 %%%%%%%%%%  Excepções %%%%%%%%%%
+excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(A, indicacao_nula).
+
 excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(A,incerto). 
 excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B). 
 
@@ -117,21 +132,26 @@ excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+principio_activo(M,P) :: (solucoes((M,P),principio_activo( M,P ), S),
++principio_activo(M,P) :: (findall((M,P),principio_activo( M,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% Medicamento tem de existir %%
 +principio_activo(M, P) :: ( medicamento(M) ).
 %% So um principio activo por medicamento %%
-+principio_activo( M,P ) :: (solucoes( (Ps), principio_activo(M, Ps), S ),
++principio_activo( M,P ) :: (findall( (Ps), principio_activo(M, Ps), S ),
                                  comprimento( S,N ), N == 1
                                  ).
+%% Não permitir a inserção de valores que já sejam nulos %%
++principio_activo(M, I) :: (findall((M, X),(principio_activo(M, X), nulo(X)), Lista),
+                                comprimento( Lista, N ), N == 0
+                                ).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 principio_activo('ben-u-ron', 'Paracetamol').
 principio_activo('vibrocil', 'Femilefrina').
 principio_activo('brufen', 'Ibuprofeno').
 principio_activo('cegripe','Paracetamol').
+principio_activo('salofalk', incerto).
 
 %%%%%%%%%%  Conhecimento negativo %%%%%%%%%%
 -principio_activo(A,B) :- nao(principio_activo(A,B)), nao(excepcao(principio_activo(A,B))).
@@ -143,16 +163,21 @@ excepcao(principio_activo(A,B)) :- principio_activo(incerto,B).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   APRESENTACAO_FARMACEUTICA   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado apresentacao_farmaceutica: Medicamento,Apresentacao -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+apresentacao_farmaceutica(M,A) :: (solucoes((M,A),apresentacao_farmaceutica( M,A ), S),
++apresentacao_farmaceutica(M,A) :: (findall((M,A),apresentacao_farmaceutica( M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% Medicamento tem de existir %%
 +apresentacao_farmaceutica(M, A) :: ( medicamento(M) ).
+%% Não é possível eliminar o tipo de comprimido se este é referenciado nos predicados preços e datas %%
+-apresentacao_farmaceutica(M, Apr) :: (-preco_recomendado(M, Apr, Preco_R),
+                      -preco_publico(M, Apr, Preco_P), -regime_especial(M, Apr, Esc, Preco_R_E),
+                      -data_introducao(M, Apr, Dia, Mes, Ano), -data_validade(M, Apr, Dia_V, Mes_V, Ano_V)).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 apresentacao_farmaceutica('ben-u-ron','Comprimidos').
@@ -165,6 +190,8 @@ apresentacao_farmaceutica('brufen', 'Xarope').
 
 apresentacao_farmaceutica('cegripe', 'Comprimidos').
 
+apresentacao_farmaceutica('salofalk', 'Supositorios').
+
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -apresentacao_farmaceutica(A,B) :- nao(apresentacao_farmaceutica(A,B)), nao(excepcao(apresentacao_farmaceutica(A,B))).
 % -apresentacao_farmaceutica('ben-u-ron','Pensos').
@@ -175,12 +202,13 @@ excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(incerto,B)
 
 
 
+
 %%%%%%%%%%%%%%%%%%   APLICAÇÃO_CLINICA   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado aplicacao_clinica: Medicamento,Aplicacao -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+aplicacao_clinica(M,A) :: (solucoes((M,A),aplicacao_clinica( M,A ), S),
++aplicacao_clinica(M,A) :: (findall((M,A),aplicacao_clinica( M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% Medicamento tem de existir %%
@@ -206,20 +234,24 @@ excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   ARMARIO   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado armario: Nome,Apresentacao -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+armario(X,A) :: (solucoes((X,A),armario( X,A ), S),
++armario(X,A) :: (findall((X,A),armario( X,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
+%% Não é possível remover armário se existirem prateleiras  e medicamentos nele %%
+-armario(X, Apr) :: (-prateleira(Nome, X), -local(Med, X, Prat)).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 armario('Armario 1', 'Comprimidos').
 armario('Armario 2', 'Xarope').
 armario('Armario 3', 'Gotas nasais').
 armario('Armario 4', incerto).
+armario('Armario 5', 'Supositorios').
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -armario(A,B) :- nao(armario(A,B)), nao(armario(local(A,B))).
@@ -230,14 +262,17 @@ excepcao(armario(A,B)) :- armario(incerto,B).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   PRATELEIRA   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado prateleira: Nome, Armario -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+prateleira(P,A) :: (solucoes((P,A),prateleira( P,A ), S),
++prateleira(P,A) :: (findall((P,A),prateleira( P,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
+%% Não é possível remover a prateleira se existirem medicamentos nesta %%
+-prateleira(P, Arm) :: (-local(Med, Arm, P)).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 prateleira('A','Armario 1').
@@ -246,6 +281,7 @@ prateleira('C','Armario 1').
 prateleira('B','Armario 2').
 prateleira('V','Armario 3').
 prateleira('E', 'Armario 4').
+prateleira('S', 'Armario 5').
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -prateleira(A,B) :- nao(prateleira(A,B)), nao(excepcao(prateleira(A,B))).
@@ -256,12 +292,13 @@ excepcao(prateleira(A,B)) :- prateleira(incerto,B).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   LOCAL   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado local: Medicamento, Armario, Prateleira -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+local(M,A,P) :: (solucoes((M,A,P),local( M,A,P ), S),
++local(M,A,P) :: (findall((M,A,P),local( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% O armário e a prateleira existem %%
@@ -280,6 +317,8 @@ local('brufen', 'Armario 2', 'B').
 
 local('cegripe', 'Armario 1', 'C').
 
+local('salofalk', 'Armario 5', 'S').
+
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -local(A,B,C) :- nao(local(A,B,C)), nao(excepcao(local(A,B,C))).
 
@@ -290,19 +329,21 @@ excepcao(local(A,B,C)) :- local(incerto, B, C).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   PRECO_RECOMENDADO   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado preco_recomendado: Medicamento, Apresentacao, Preco -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+preco_recomendado(M,A,P) :: (solucoes((M,A,P),preco_recomendado( M,A,P ), S),
++preco_recomendado(M,A,P) :: (findall((M,A,P),preco_recomendado( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
 +preco_recomendado(M,A,P) :: aplicacao_clinica(M,A).
 %% Não permitir a inserção de valores que já sejam nulos %%
-+preco_recomendado(M, A, P) :: (preco_recomendado(M, A, X),
-                               nao(nulo(X))).
++preco_recomendado(M, A, P) :: (findall(Xs, (preco_recomendado(M, A, Xs), nao(nulo(Xs))), [])).
+%+preco_recomendado(M, A, P) :: (preco_recomendado(M, A, X),
+%                               nao(nulo(X))).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 preco_recomendado('ben-u-ron', 'Xarope', 12).
@@ -313,6 +354,8 @@ preco_recomendado('brufen', 'Comprimidos', 6).
 preco_recomendado('brufen', 'Xarope', 8).
 
 preco_recomendado('cegripe', 'Comprimidos', 4).
+
+preco_recomendado('salofalk', 'Supositorios', incerto).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -preco_recomendado(A,B,C) :- nao(preco_recomendado(A,B,C)), nao(excepcao(preco_recomendado(A,B,C))).
@@ -328,12 +371,13 @@ excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   PRECO_PUBLICO   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado preco_publico: Medicamento, Apresentacao, Preco -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+preco_publico(M,A,P) :: (solucoes((M,A,P),preco_publico( M,A,P ), S),
++preco_publico(M,A,P) :: (findall((M,A,P),preco_publico( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
@@ -350,6 +394,8 @@ preco_publico('vibrocil', 'Gotas nasais', 4.95).
 preco_publico('brufen', 'Comprimidos', 8).
 preco_publico('brufen', 'Xarope', preco_nulo).
 
+preco_publico('salofalk', 'Supositorios', 10).
+
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -preco_publico(A,B,C) :- nao(preco_publico(A,B,C)), nao(excepcao(preco_publico(A,B,C))).
 
@@ -365,12 +411,13 @@ excepcao(preco_publico(A,B,C)) :- preco_publico(A,B,incerto).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   REGIME_ESPECIAL   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado regime_especial: Medicamento, Apresentacao, Escalao, Preco -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+regime_especial(M,A,E,P) :: (solucoes((M,A,E,P),regime_especial( M,A,E,P ), S),
++regime_especial(M,A,E,P) :: (findall((M,A,E,P),regime_especial( M,A,E,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
@@ -393,11 +440,14 @@ regime_especial('brufen', 'Xarope', 'B', incerto).
 regime_especial('cegripe', 'Comprimidos', 'A', 2).
 regime_especial('cegripe', 'Comprimidos', 'B', 3).
 
+regime_especial('salofalk', 'Supositorios', 'A', 8).
+
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -regime_especial(A,B,C,D) :- nao(regime_especial(A,B,C,D)), nao(excepcao(regime_especial(A,B,C,D))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(regime_especial('brufen', 'Comprimidos', 'A', P)) :- P>=4, P=<6.
+excepcao(regime_especial('salofalk', 'Supositorios', 'B', P)) :- P>=8.5, P=<9.5.
 
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, preco_nulo).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, incerto, D).
@@ -407,12 +457,13 @@ excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, incerto).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   DATA_VALIDADE   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado data_validade: Medicamento, Apresentacao, Dia, Mes, Ano -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+data_validade(X,A,D,M,A) :: (solucoes((X,A,D,M,A),data_validade( X,A,D,M,A ), S),
++data_validade(X,A,D,M,A) :: (findall((X,A,D,M,A),data_validade( X,A,D,M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
@@ -440,6 +491,8 @@ data_validade('brufen', 'Xarope', incerto, incerto, 2015).
 
 data_validade('cegripe', 'Comprimidos', 31, 12, 2015).
 
+data_validade('salofalk', 'Supositorios', 15, 06, 2020).
+
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -data_validade(A,B,C,D,E) :- nao(data_validade(A,B,C,D,E)), nao(excepcao(data_validade(A,B,C,D,E))).
 
@@ -454,12 +507,13 @@ excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,incerto,incerto)
 
 
 
+
 %%%%%%%%%%%%%%%%%%   DATA_INTRODUÇÃO   %%%%%%%%%%%%%%%%%%%
 % Estensao do predicado data_introducao: Medicamento, Apresentacao, Dia, Mes, Ano -> {V,F,D}
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+data_introducao(X,A,D,M,A) :: (solucoes((X,A,D,M,A),data_introducao( X,A,D,M,A ), S),
++data_introducao(X,A,D,M,A) :: (findall((X,A,D,M,A),data_introducao( X,A,D,M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 %% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
@@ -477,7 +531,6 @@ excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,incerto,incerto)
                                    nulo(Ano_X))).
                                
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
-excepcao(data_introducao('ben-u-ron', 'Comprimidos', D, 02, 2013)) :- D>=15, D=<25.
 data_introducao('ben-u-ron', 'Xarope', 23, 02, 2013).
 
 data_introducao('vibrocil', 'Gotas nasais', 01, 01, 2010).
@@ -491,6 +544,10 @@ data_introducao('cegripe', 'Comprimidos', data_nula, data_nula, data_nula).
 -data_introducao(A,B,C,D,E) :- nao(data_introducao(A,B,C,D,E)), nao(excepcao(data_introducao(A,B,C,D,E))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
+excepcao(data_introducao('ben-u-ron', 'Comprimidos', D, 02, 2013)) :- D>=15, D=<25.
+
+excepcao(data_introducao('salofalk', 'Supositorios', 01, 01, Ano)) :- Ano >= 2010, Ano =< 2013.
+
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B, data_nula, data_nula, data_nula).
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,C,incerto,E).
 excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,incerto,D,E).
@@ -501,12 +558,14 @@ excepcao(data_introducao(A,B,C,D,E)) :- data_introducao(A,B,incerto,incerto,ince
 
 
 
+
 %%%%%%%%%%%%%%%%%%   NULO   %%%%%%%%%%%%%%%%%%%
 % Extensao do meta-predicado nulo: Valor -> {V,F}
 
 nulo(preco_nulo).
 nulo(data_nula).
 nulo(aplicacao_nula).
+nulo(indicacao_nula).
 
 %%%%%%%%%% ----------------------------------------------------------------------------------- %%%%%%%%%%
 
@@ -548,7 +607,7 @@ construir(Solucoes) :-
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        solucoes( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +Termo::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -565,10 +624,14 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        remocao(Termo) .
+        findall( Invariante, -Termo::Invariante, Lista),
+        remocao(Termo),
+        teste( Lista ) .
 
 remocao(Termo) :-
         retract(Termo).
+remocao(Termo) :-
+        assert(Termo), !, fail .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
