@@ -36,22 +36,6 @@
 :- dynamic data_validade/5.
 :- dynamic data_introducao/5.
 
-% NAO PODE ESTAR EM MAIS QUE UMA PRATELEIRA DO MESMO ARMARIO ????????
-% VERIFICAR LETRA ARMARIO MEDICAMENTO ?????????
-
-% _________________FALTA___________________________
-
-% PREDICADOS: indicacoes_terapeuticas, apresentacoes_terapeuticas, aplicacoes_clinicas, locais, precos, datas... bla bla
-% PREDICADOS: preco (MEDICAMENTO,APRESENTACAO,ESCALAO) -> dá o preco do regime especial para o escalao, se o escalao nao existir da o preco publico
-% ACRESCENTAR APRESENTACAO NO (LOCAL?)
-% DADOS TESTE E ARRANJAR UMA MANEIRA DE OS REPRESENTAR NO RELATORIO
-
-% MAIS CASOS DE CONHECIMENTO INCERTO? EX: REGIME_ESPECIAL(A,INCERTO,INCERTO)???????????????????
-
-% _________________DUVIDAS_________________________
-
-% LISTA DE DATAS PARA O MESMO MEDICAMENTO E APRESENTACAO ????
-
 
 %%%%%%%%%%%%%%%%%%   MEDICAMENTO   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado medicamento: Nome -> {V,F,D}
