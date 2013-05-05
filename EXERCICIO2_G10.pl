@@ -125,6 +125,7 @@ excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B).
 
 
 
+
 %%%%%%%%%%%%%%%%%%   PRINCIPIO_ACTIVO   %%%%%%%%%%%%%%%%%%%
 % Extensao do predicado principio_activo: Medicamento,Substancia -> {V,F,D}
 
@@ -213,7 +214,7 @@ excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(incerto,B)
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 aplicacao_clinica(M,A) :- indicacao_terapeutica(M,A).
 
-aplicacao_clinica('ben-u-ron', 'Sonolencia').
+aplicacao_clinica('ben-u-ron', 'Insonia').
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -aplicacao_clinica(A,B) :- nao(aplicacao_clinica(A,B)), nao(excepcao(aplicacao_clinica(A,B))).
@@ -623,13 +624,11 @@ teste([H|T]) :-
 
 removerConhecimento(Termo) :-
         findall( Invariante, -Termo::Invariante, Lista),
-        remocao(Termo),
-        teste( Lista ) .
-
+        teste( Lista ) ,
+        remocao(Termo).
+        
 remocao(Termo) :-
         retract(Termo).
-remocao(Termo) :-
-        assert(Termo), !, fail .
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
