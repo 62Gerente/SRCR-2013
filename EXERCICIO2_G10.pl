@@ -93,11 +93,9 @@ medicamento('salofalk').
                                 ).
 %% Medicamento tem de existir  %%
 +indicacao_terapeutica(M,I) :: ( medicamento(M) ).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+indicacao_terapeutica(M, I) :: (findall((M, X),(indicacao_terapeutica(M, X), nulo(X)), Lista),
-                                comprimento( Lista, N ), N == 0
-                                ).
-                                
+%% Não permitir a inserção de conhecimento relativo ao salofalk %%
++indicacao_terapeutica(M, I) :: (findall(X, (indicacao_terapeutica(salofalk, X), nao(nulo(X))), [])).
+
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 indicacao_terapeutica('ben-u-ron', 'Sindromes gripais').
 indicacao_terapeutica('ben-u-ron', 'Enxaquecas').
@@ -122,8 +120,8 @@ indicacao_terapeutica('salofalk', indicacao_nula).
 %%%%%%%%%%  Excepções %%%%%%%%%%
 excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(A, indicacao_nula).
 
-excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(A,incerto). 
-excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B). 
+excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(A,incerto).
+excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B).
 
 
 
@@ -141,10 +139,6 @@ excepcao(indicacao_terapeutica(A,B)) :- indicacao_terapeutica(incerto,B).
 +principio_activo( M,P ) :: (findall( (Ps), principio_activo(M, Ps), S ),
                                  comprimento( S,N ), N == 1
                                  ).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+principio_activo(M, I) :: (findall((M, X),(principio_activo(M, X), nulo(X)), Lista),
-                                comprimento( Lista, N ), N == 0
-                                ).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 principio_activo('ben-u-ron', 'Paracetamol').
@@ -158,7 +152,7 @@ principio_activo('salofalk', incerto).
 % -principio_activo(M,S) :- principio_activo(M,X).  % S=!X
 
 %%%%%%%%%%  Excepções %%%%%%%%%%
-excepcao(principio_activo(A,B)) :- principio_activo(A,incerto).
+excepcao(principio_activo(A,B)) :- principio_activo(A, incerto).
 excepcao(principio_activo(A,B)) :- principio_activo(incerto,B).
 
 
@@ -197,8 +191,8 @@ apresentacao_farmaceutica('salofalk', 'Supositorios').
 % -apresentacao_farmaceutica('ben-u-ron','Pensos').
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
-excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(A,incerto). 
-excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(incerto,B). 
+excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(A,incerto).
+excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(incerto,B).
 
 
 
@@ -213,22 +207,20 @@ excepcao(apresentacao_farmaceutica(A,B)) :- apresentacao_farmaceutica(incerto,B)
                                 ).
 %% Medicamento tem de existir %%
 +aplicacao_clinica(M, A) :: ( medicamento(M) ).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+aplicacao_clinica(M, A) :: (aplicacao_clinica(M, X),
-                               nao(nulo(X))).
+%% Não permitir a inserção de conhecimento relativo ao salofalk %%
++aplicacao_clinica(M, A) :: (findall(X, (aplicacao_clinica(salofalk, A), nao(nulo(X))), [])).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 aplicacao_clinica(M,A) :- indicacao_terapeutica(M,A).
 
 aplicacao_clinica('ben-u-ron', 'Sonolencia').
 
-%aplicacao_clinica('vibrocil', aplicacao_nula).
-
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -aplicacao_clinica(A,B) :- nao(aplicacao_clinica(A,B)), nao(excepcao(aplicacao_clinica(A,B))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
-%excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(A, aplicacao_nula).
+excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(A, indicacao_nula).
+
 excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(A,incerto).
 excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 
@@ -243,6 +235,8 @@ excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 +armario(X,A) :: (findall((X,A),armario( X,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
+%% A apresentação do armário 4 nunca poderá ser inserida %%
++armario(Nome, Apr) :: (findall(X, (armario('Armario 4', X), nao(nulo(X))), [])).
 %% Não é possível remover armário se existirem prateleiras  e medicamentos nele %%
 -armario(X, Apr) :: (-prateleira(Nome, X), -local(Med, X, Prat)).
 
@@ -250,14 +244,17 @@ excepcao(aplicacao_clinica(A,B)) :- aplicacao_clinica(incerto,B).
 armario('Armario 1', 'Comprimidos').
 armario('Armario 2', 'Xarope').
 armario('Armario 3', 'Gotas nasais').
-armario('Armario 4', incerto).
+armario('Armario 4', apresentacao_nula).
 armario('Armario 5', 'Supositorios').
+armario('Armario 6', incerto).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -armario(A,B) :- nao(armario(A,B)), nao(armario(local(A,B))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
-excepcao(armario(A,B)) :- armario(A,incerto).
+excepcao(armario(A,B)) :- armario(A, apresentacao_nula).
+
+excepcao(armario(A,B)) :- armario(A, incerto).
 excepcao(armario(A,B)) :- armario(incerto,B).
 
 
@@ -282,13 +279,14 @@ prateleira('B','Armario 2').
 prateleira('V','Armario 3').
 prateleira('E', 'Armario 4').
 prateleira('S', 'Armario 5').
+prateleira(incerto, 'Armario 5').
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
 -prateleira(A,B) :- nao(prateleira(A,B)), nao(excepcao(prateleira(A,B))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(prateleira(A,B)) :- prateleira(A,incerto).
-excepcao(prateleira(A,B)) :- prateleira(incerto,B).
+excepcao(prateleira(A,B)) :- prateleira(incerto, B).
 
 
 
@@ -301,8 +299,8 @@ excepcao(prateleira(A,B)) :- prateleira(incerto,B).
 +local(M,A,P) :: (findall((M,A,P),local( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% O armário e a prateleira existem %%
-+local( M,A,P ) :: (armario(A,X), prateleira(P,A)).
+%% O medicamento, o armário e a prateleira existem %%
++local( M,A,P ) :: (medicamento(M), armario(A,X), prateleira(P,A)).
 %% SO DEIXAR POR UM MEDICAMENTO NO ARMARIO CERTO (APRESENTACAO ARMARIO = UMA DAS APRESENTACOES DO MEDICAMENTO) %%
 +local( M,A,P ) :: (armario(A,X),aplicacao_clinica(M,X)).
 
@@ -338,10 +336,10 @@ excepcao(local(A,B,C)) :- local(incerto, B, C).
 +preco_recomendado(M,A,P) :: (findall((M,A,P),preco_recomendado( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
-+preco_recomendado(M,A,P) :: aplicacao_clinica(M,A).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+preco_recomendado(M, A, P) :: (findall(Xs, (preco_recomendado(M, A, Xs), nao(nulo(Xs))), [])).
+%% SO DEIXAR REFERIR MEDICAMENTO E APRESENTACAO SE ELA EXISTIR %%
++preco_recomendado(M,A,P) :: (medicamento(M), apresentacao_farmaceutica(M,A)).
+%% Não permitir que o preco recomendado do vibrocil venha a ser inserido %%
++preco_recomendado(M, A, P) :: (findall(Xs, (preco_recomendado('vibrocil', 'Gotas nasais', Xs), nao(nulo(Xs))), [])).
 %+preco_recomendado(M, A, P) :: (preco_recomendado(M, A, X),
 %                               nao(nulo(X))).
 
@@ -380,11 +378,10 @@ excepcao(preco_recomendado(A,B,C)) :- preco_recomendado(A,B,incerto).
 +preco_publico(M,A,P) :: (findall((M,A,P),preco_publico( M,A,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
-+preco_publico(M,A,P) :: aplicacao_clinica(M,A).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+preco_publico(M, A, P) :: (preco_publico(M, A, X),
-                               nao(nulo(X))).
+%% SO DEIXAR REFERIR MEDICAMENTO E APRESENTACAO SE ELA EXISTIR %%
++preco_publico(M,A,P) :: (medicamento(M), apresentacao_farmaceutica(M,A)).
+%% Não permitir que o preco publico do brufen em xarope venha a ser inserido %%
++preco_publico(M, A, P) :: (findall(Xs, (preco_publico('brufen', 'Xarope', Xs), nao(nulo(Xs))), [])).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 preco_publico('ben-u-ron', incerto, 5).
@@ -420,15 +417,17 @@ excepcao(preco_publico(A,B,C)) :- preco_publico(A,B,incerto).
 +regime_especial(M,A,E,P) :: (findall((M,A,E,P),regime_especial( M,A,E,P ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
-+regime_especial(M,A,E,P) :: aplicacao_clinica(M,A).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+regime_especial(M, A, E, P) :: (regime_especial(M, A, E, X),
-                               nao(nulo(X))).
+%% SO DEIXAR REFERIR MEDICAMENTO E APRESENTACAO SE ELA EXISTIR %%
++regime_especial(M,A,E,P) :: (medicamento(M), apresentacao_farmaceutica(M,A)).
+%% Não permitir que o preco de regime especial de escalão B do brufen em comprimidos venha a ser inserido %%
++regime_especial(M,A,E,P) :: (findall(Xs, (regime_especial('brufen', 'Comprimidos', 'B', Xs), nao(nulo(Xs))), [])).
+%% Não permitir que o preco de regime especial de escalão A do ben-u-ron em xarope venha a ser inserido %%
++regime_especial(M,A,E,P) :: (findall(Xs, (regime_especial('ben-u-ron', 'Xarope', 'A', Xs), nao(nulo(Xs))), [])).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 regime_especial('ben-u-ron', 'Comprimidos', 'A', 3).
 regime_especial('ben-u-ron', 'Comprimidos', 'B', incerto).
+regime_especial('ben-u-ron', 'Xarope', 'A', preco_nulo).
 
 regime_especial('vibrocil', 'Gotas nasais', 'A', incerto).
 regime_especial('vibrocil', 'Gotas nasais', 'B', 4).
@@ -450,6 +449,7 @@ excepcao(regime_especial('brufen', 'Comprimidos', 'A', P)) :- P>=4, P=<6.
 excepcao(regime_especial('salofalk', 'Supositorios', 'B', P)) :- P>=8.5, P=<9.5.
 
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, preco_nulo).
+
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, incerto, D).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, incerto, C, D).
 excepcao(regime_especial(A,B,C,D)) :- regime_especial(incerto, B, C, D).
@@ -463,22 +463,20 @@ excepcao(regime_especial(A,B,C,D)) :- regime_especial(A, B, C, incerto).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+data_validade(X,A,D,M,A) :: (findall((X,A,D,M,A),data_validade( X,A,D,M,A ), S),
++data_validade(X,Apr,D,M,A) :: (findall((X,Apr,D,M,A),data_validade( X,Apr,D,M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
-+data_validade(X,A,D,M,A) :: aplicacao_clinica(M,A).
+%% SO DEIXAR REFERIR MEDICAMENTO E APRESENTACAO SE ELA EXISTIR %%
++data_validade(X,Apr,D,M,A) :: (medicamento(X), apresentacao_farmaceutica(X, Apr)).
 %% Data de validade maior do que data de introdução %%
-+data_validade( X,A,D,M,A ) :: (
-                                ( nao(data_introducao(X,A,D2,M2,A2)) );
++data_validade( X,Apr,D,M,A ) :: (
+                                ( nao(data_introducao(X,Apr,D2,M2,A2)) );
                                 ( A>A2 );
                                 ( A==A2, M>M2 );
                                 ( A==A2, M==M2, D>D2 )).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+data_validade(M, Apr, D, M, Ano) :: (data_validade(M, Apr, D_X, M_X, Ano_X),
-                               nao(nulo(D_X),
-                                   nulo(M_X),
-                                   nulo(Ano_X))).
+%% Não permitir que a data de validade do ben-u-ron em xarope venha a ser inserida %%
++data_validade(X,Apr,D,M,A) :: (findall((D_X, M_X, A_X), (data_validade('ben-u-ron', 'Xarope', D_X, M_X, A_X),
+                                     (nao(nulo(D_X)); nao(nulo(M_X)); nao(nulo(A_X)))), [])).
 
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 data_validade('ben-u-ron', 'Comprimidos', 23, 10, 2013).
@@ -498,6 +496,7 @@ data_validade('salofalk', 'Supositorios', 15, 06, 2020).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B, data_nula, data_nula, data_nula).
+
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,C,incerto,E).
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,D,E).
 excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,incerto,C,D,E).
@@ -513,22 +512,20 @@ excepcao(data_validade(A,B,C,D,E)) :- data_validade(A,B,incerto,incerto,incerto)
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 %% Não pode haver conhecimento repetido %%
-+data_introducao(X,A,D,M,A) :: (findall((X,A,D,M,A),data_introducao( X,A,D,M,A ), S),
++data_introducao(X,Apr,D,M,A) :: (findall((X,Apr,D,M,A),data_introducao( X,Apr,D,M,A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
-%% SO DEIXAR REFERIR APRESENTACAO SE ELA EXISTIR %%
-+data_introducao(X,A,D,M,A) :: aplicacao_clinica(M,A).
+%% SO DEIXAR REFERIR MEDICAMENTO E APRESENTACAO SE ELA EXISTIR %%
++data_introducao(X,Apr,D,M,A) :: ( medicamento(X), apresentacao_farmaceutica(X,Apr) ).
 %% Data de introdução menor do que data de validade %%
-+data_introducao( X,A,D,M,A ) :: (
-                                ( nao(data_validade(X,A,D2,M2,A2)) );
-                                ( A<A2 );
-                                ( A==A2, M<M2 );
-                                ( A==A2, M==M2, D<D2 )).
-%% Não permitir a inserção de valores que já sejam nulos %%
-+data_introducao(M, Apr, D, M, Ano) :: (data_introducao(M, Apr, D_X, M_X, Ano_X),
-                               nao(nulo(D_X),
-                                   nulo(M_X),
-                                   nulo(Ano_X))).
++data_introducao( X,Apr,D,M,A ) :: (
+                                 ( nao(data_validade(X,Apr,D2,M2,A2)) );
+                                 ( A<A2 );
+                                 ( A==A2, M<M2 );
+                                 ( A==A2, M==M2, D<D2 )).
+%% Não permitir que a data de introducao do cegripe em comprimidos venha a ser inserida %%
++data_introducao(X,Apr,D,M,A) :: (findall((D_X, M_X, A_X), (data_introducao('cegripe', 'Comprimidos', D_X, M_X, A_X),
+                                      (nao(nulo(D_X)); nao(nulo(M_X)); nao(nulo(A_X)))), [])).
                                
 %%%%%%%%%%   Base de conhecimento inicial    %%%%%%%%%%
 data_introducao('ben-u-ron', 'Xarope', 23, 02, 2013).
@@ -566,6 +563,7 @@ nulo(preco_nulo).
 nulo(data_nula).
 nulo(aplicacao_nula).
 nulo(indicacao_nula).
+nulo(apresentacao_nula).
 
 %%%%%%%%%% ----------------------------------------------------------------------------------- %%%%%%%%%%
 
