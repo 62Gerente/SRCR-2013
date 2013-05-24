@@ -52,11 +52,13 @@ demo( estrutura,Agente,Questao ) :-
     write( (Agente ) ),nl,
     e_um(Agente,Classe,Lista),
     nao(pertence(Questao,Lista)),
-%    write( ( 1,Agente::Classe ) ),nl,
+%    write( ( 1,Agente,Classe ) ),nl,
     out( demo( Classe,Questao ) ).
 demo( estrutura,Agente,Questao ) :-
     write( ( 2,nao ) ),nl,
-    out( prova( Agente,nao ) ).
+    out( prova( Agente,Questao,nao ) ).
+
+
 
 pertence(X, [X|T]).
 pertence(Questao, [X|T]):- pertence(Questao, T).  

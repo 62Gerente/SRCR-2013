@@ -50,16 +50,18 @@ demo :-
 % Extensao do meta-predicado demo: Agente,Questao -> {V,F}
 
 demo( Agente,Questao ) :-
-    Agente::Questao,
-    write( ( 1,Agente::Questao ) ),nl,
-    out( prova( Agente,Questao ) ).
+    Questao,
+    write( ( 1,Agente,Questao ) ),nl,
+    out( prova( Agente,Questao,verdade ) ).
+demo( Agente, Questao):- 
+    nao(Questao),
+    nao(-Questao),
+    out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
-    e_um( Agente,Classe ),
-    write( ( 2,e_um( Agente,Classe ) ) ),nl,
-    out( demo( Classe,Questao ) ).
-demo( Agente,Questao ) :-
-    write( ( 3,nao ) ),nl,
-    out( prova( Agente,nao ) ).
+    out(demo(estrutura,Agente,Questao)).
+%demo( Agente,Questao ) :-
+%    write( ( 3,nao ) ),nl,
+%    out( prova( Agente,nao ) ).
 
 
 
