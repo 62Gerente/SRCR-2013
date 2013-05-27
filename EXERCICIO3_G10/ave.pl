@@ -51,11 +51,12 @@ demo( Agente,Questao ) :-
 %    write( ( 3,nao ) ),nl,
 %    out( prova( Agente,nao ) ).
 
+
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Ave,Alimento -> {V,F}
 
-ave :: alimento( sementes ).
-ave :: alimento( insectos ).
+alimento( ave, sementes ).
+alimento( ave, insectos ).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 

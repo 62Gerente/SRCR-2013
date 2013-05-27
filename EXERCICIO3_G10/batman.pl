@@ -9,9 +9,9 @@
 
 :- op( 900,xfy,'::' ).
 :- dynamic '-'/1.
-:- dynamic cor/1.
-:- dynamic alimento/1.
-:- dynamic comunicacao/1.
+:- dynamic cor/2.
+:- dynamic alimento/2.
+:- dynamic comunicacao/2.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % SICStus PROLOG: Carregamento das bibliotecas
@@ -21,10 +21,10 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Teoria representada na forma Agente :: Conhecimento
 
-batman :: cor( preto ).
-batman :: alimento( fruta ).
-batman :: alimento( legumes ).
-batman :: comunicacao( ultra-som ).
+cor( batman, preto ).
+alimento( batman, fruta ).
+alimento( batman, legumes ).
+comunicacao( batman, ultra-som ).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -44,6 +44,7 @@ demo( Agente,Questao ) :-
 %    write( ( 3,nao ) ),nl,
 %    out( prova( Agente,nao ) ).
 
+
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Iniciaizacao da vida do agente
 
@@ -56,7 +57,7 @@ demo :-
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Extensao do predicado localizacao: Ave,Localizacao -> {V,F}
+% Extensao do predicado localizacao: Batman,Localizacao -> {V,F}
 
 localizacao( batman, incerto ).
 

@@ -9,10 +9,10 @@
 
 :- op( 900,xfy,'::' ).
 :- dynamic '-'/1.
-:- dynamic alimento/1.
-:- dynamic cobertura/1.
-:- dynamic locomocao/1.
-:- dynamic reproducao/1.
+:- dynamic alimento/2.
+:- dynamic cobertura/2.
+:- dynamic locomocao/2.
+:- dynamic reproducao/2.
 :- dynamic e_um/2.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -23,11 +23,11 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Teoria representada na forma Agente :: Conhecimento
 
-mamifero :: cobertura( pelos ).
-mamifero :: locomocao( terrestre ).
-mamifero :: locomocao( aerea ).
-mamifero :: locomocao( aquatica ).
-mamifero :: reproducao( viviparo ).
+cobertura( mamifero,  pelos ).
+locomocao( mamifero, terrestre ).
+locomocao( mamifero, aerea ).
+locomocao( mamifero, aquatica ).
+reproducao( mamifero, viviparo ).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -44,14 +44,19 @@ demo :-
 % Extensao do meta-predicado demo: Agente,Questao -> {V,F}
 
 demo( Agente,Questao ) :-
-    Agente::Questao,
-    write( ( 1,Agente::Questao ) ),nl,
-    out( prova( Agente,Questao ) ).
+    Questao,
+    write( ( 1,Agente,Questao ) ),nl,
+    out( prova( Agente,Questao,verdade ) ).
+demo( Agente, Questao):- 
+    nao(Questao),
+    nao(-Questao),
+    out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
     out(demo(estrutura,Agente,Questao)).
-demo( Agente,Questao ) :-
-    write( ( 3,nao ) ),nl,
-    out( prova( Agente,nao ) ).
+%demo( Agente,Questao ) :-
+%    write( ( 3,nao ) ),nl,
+%    out( prova( Agente,nao ) ).
+
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -

@@ -25,13 +25,10 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Teoria representada na forma Agente :: Conhecimento
 
-
-
-
-golfinho :: cor( cinzento ).
-golfinho :: alimento( peixes ).
-golfinho :: locomocao( aquatica ).
-golfinho :: comunicacao( ultra-som ).
+cor( golfinho, cinzento ).
+alimento( golfinho, peixes ).
+locomocao( golfinho, aquatica ).
+comunicacao( golfinho, ultra-som ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Inicializacao da vida do agente
@@ -60,6 +57,7 @@ demo( Agente,Questao ) :-
 %demo( Agente,Questao ) :-
 %    write( ( 3,nao ) ),nl,
 %    out( prova( Agente,nao ) ).
+
 
 
 
