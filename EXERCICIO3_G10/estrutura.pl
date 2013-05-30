@@ -8,7 +8,10 @@
 % SICStus PROLOG: definicoes iniciais
 
 :- dynamic e_um/3.
-:- dynamic e_um/2.
+:- dynamic ciclos/1.
+:- dynamic demo/3.
+
+
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % SICStus PROLOG: Carregamento das bibliotecas
@@ -22,16 +25,14 @@ e_um(ave, animal, []).
 e_um(mamifero, animal, []).
 e_um(avestruz, ave, [locomocao(_)]).
 e_um(golfinho, mamifero, [locomocao(aerea), locomocao(terrestre)]).
-e_um(batman, ave, [cobertura(X),reproducao(X),alimento(X)] ).
+e_um(golfinho, ave, []).
+e_um(batman, ave, [cobertura(_),reproducao(_),alimento(_)] ).
 e_um(batman, mamifero, [locomocao(terrestre),locomocao(aquatica)]).
 
-e_um(ave, animal).
-%e_um(mamifero, animal).
-e_um(avestruz, ave).
-e_um(golfinho, mamifero).
-e_um(batman, ave).
-e_um(batman, mamifero).
 
+
+ciclos(0).
+max_ciclos(1000).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -49,15 +50,32 @@ demo :-
 % Extensao do meta-predicado demo: Estrutura,Agente,Questao -> {V,F}
 
 demo( estrutura,Agente,Questao ) :-
-    write( (Agente ) ),nl,
-    e_um(Agente,Classe,Lista),
+    retract(e_um(Agente,Classe,Lista)),
+    assert(e_um(Agente,Classe,Lista)),
     nao(pertence(Questao,Lista)),
-%    write( ( 1,Agente,Classe ) ),nl,
-    out( demo( Classe,Questao ) ).
+    write( 'Vou enviar ao ' ), write(Classe), nl,
+    out( demo( Classe,Questao )),
+    esperar(Classe,Questao).
 demo( estrutura,Agente,Questao ) :-
-    write( ( 2,nao ) ),nl,
+    write( 'Nao' ),nl,
     out( prova( Agente,Questao,nao ) ).
 
+
+
+esperar(Agente,Questao):- 
+    (rd_noblock(prova(Agente,Questao,_));  
+    rd_noblock(demo(estrutura,Agente,Questao))).
+esperar(Agente,Questao):-
+    max_ciclos(M),
+    retract(ciclos(X)),
+    X<M,
+    assert(ciclos(X+1)),
+    esperar(Agente,Questao).
+esperar(Agente,Questao):-
+    write('Nao foi possivel contactar o agente '),
+    write(Agente),nl,
+    assert(ciclos(0)),
+    demo(estrutura,Agente,Questao).
 
 
 pertence(X, [X|T]).
@@ -73,6 +91,5 @@ nao( Questao ).
 
 ligar( QN ) :-
     linda_client( QN ).
-
 qn( L ) :-
     bagof_rd_noblock( X,X,L ).

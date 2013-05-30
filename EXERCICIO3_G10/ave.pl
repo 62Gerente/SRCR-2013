@@ -13,6 +13,12 @@
 :- dynamic cobertura/2.
 :- dynamic locomocao/2.
 :- dynamic reproducao/2.
+:- dynamic e_um/2.
+:- dynamic cor/2.
+:- dynamic comunicacao/2.
+:- dynamic data_registo/2.
+:- dynamic ciencia/2.
+:- dynamic seres/2.
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -38,86 +44,86 @@ demo :-
 % Extensao do meta-predicado demo: Agente,Questao -> {V,F}
 
 demo( Agente,Questao ) :-
-    Questao,
-    write( ( 1,Agente,Questao ) ),nl,
+    Agente??Questao,
+    %write( ( 1,Agente,Questao ) ),nl,
+    write('e verdade'), nl,
     out( prova( Agente,Questao,verdade ) ).
 demo( Agente, Questao):- 
-    nao(Questao),
-    nao(-Questao),
+    nao(Agente??Questao),
+    nao(-Agente??Questao),
+    write('e desconhecido'), nl,
     out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
+    write('Vou enviar a estrutura'), nl,
     out(demo(estrutura,Agente,Questao)).
-%demo( Agente,Questao ) :-
-%    write( ( 3,nao ) ),nl,
-%    out( prova( Agente,nao ) ).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Ave,Alimento -> {V,F}
 
-alimento( ave, sementes ).
-alimento( ave, insectos ).
+ave ?? alimento( sementes ).
+ave ?? alimento( insectos ).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+alimento(A,B) :: (findall((A,B),alimento( A,B ), S),
++Ag??alimento(A) :: (findall(A,Ag??alimento( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--alimento(A,B) :- nao(alimento(A,B)), nao(excepcao(alimento(A,B))).
+-Ag??alimento(A) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado cobertura: Ave,Cobertura -> {V,F}
 
-cobertura( ave, penas ).
+ave ?? cobertura( penas ).
 
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+cobertura(A,B) :: (findall((A,B),cobertura( A,B ), S),
++Ag??cobertura(A) :: (findall(A,Ag??cobertura( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 
--cobertura(A,B) :- nao(cobertura(A,B)), nao(excepcao(cobertura(A,B))).
+-Ag??cobertura(A,B) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado locomocao: Ave,Locomocao -> {V,F}
 
-locomocao( ave, voo ).
+ave ?? locomocao( voo ).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+locomocao(A,B) :: (findall((A,B),locomocao( A,B ), S),
++Ag??locomocao(A) :: (findall(A,Ag??locomocao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
--locomocao(A,B) :- nao(locomocao(A,B)), nao(excepcao(locomocao(A,B))).
+-Ag??locomocao(A) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado reproducao: Ave,Reproducao -> {V,F}
 
-reproducao( ave, oviparo ).
+ave ?? reproducao( oviparo ).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+reproducao(A,B) :: (findall((A,B),reproducao( A,B ), S),
++Ag??reproducao(A) :: (findall(A,Ag??reproducao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
--reproducao(A,B) :- nao(reproducao(A,B)), nao(excepcao(reproducao(A,B))).
+-Ag??reproducao(A) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
 
@@ -130,6 +136,36 @@ comprimento([H|T], R) :-
         comprimento(T, X),
         R is 1+X .
 
+
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
+
+inserirConhecimento(Termo) :-
+        findall( Invariante, +Termo::Invariante, Lista),
+        insercao(Termo),
+        teste( Lista ).
+
+insercao(Termo) :-
+        assert(Termo) .
+insercao(Termo) :-
+        retract(Termo), !, fail .
+
+teste([]) .
+teste([H|T]) :-
+        H, teste(T) .  
+
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
+
+removerConhecimento(Termo) :-
+        findall( Invariante, -Termo::Invariante, Lista),
+        teste( Lista ) ,
+        remocao(Termo).
+        
+remocao(Termo) :-
+        retract(Termo).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
