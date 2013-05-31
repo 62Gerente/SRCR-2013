@@ -182,6 +182,8 @@ excepcao(Ag??nome_cientifico(A)):- Ag??nome_cientifico( incerto).
 
 
 
+-Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 

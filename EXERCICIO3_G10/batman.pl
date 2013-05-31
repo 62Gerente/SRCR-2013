@@ -143,7 +143,7 @@ batman ?? data_registo( data_nula ).
 -Ag??data_registo(A) :- nao(Ag??data_registo(A)), nao(excepcao(Ag??data_registo(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
-excepcao(Ag??data_registo(A)):- AG??data_registo( data_nula).
+excepcao(Ag??data_registo(A)):- Ag??data_registo( data_nula).
 
 
 
@@ -154,6 +154,8 @@ excepcao(Ag??data_registo(A)):- AG??data_registo( data_nula).
 nulo(data_nula).
 
 
+
+-Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 nao( Questao ) :-

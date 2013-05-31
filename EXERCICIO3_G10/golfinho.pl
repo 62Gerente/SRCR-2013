@@ -161,9 +161,9 @@ inserirConhecimento(Termo) :-
         teste( Lista ).
 
 insercao(Termo) :-
-        assert(Termo) .
+        assert(golfinho??Termo) .
 insercao(Termo) :-
-        retract(Termo), !, fail .
+        retract(golfinho??Termo), !, fail .
 
 teste([]) .
 teste([H|T]) :-

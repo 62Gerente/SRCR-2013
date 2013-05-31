@@ -128,6 +128,9 @@ ave ?? reproducao( oviparo ).
 
 
 
+-Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+
+
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado comprimento: L, R -> {V, F}
 
