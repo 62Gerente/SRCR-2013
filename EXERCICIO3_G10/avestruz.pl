@@ -38,7 +38,7 @@
 demo :-
     write( 'avestruz' ),nl,
     in( demo( avestruz,Questao ) ),
-    write( 'demo( avestruz,Questao )' ),nl,
+    write( demo( golfinho,Questao ) ),nl,
     demo( avestruz,Questao ),
     demo.
 
@@ -52,7 +52,7 @@ demo( Agente,Questao ) :-
     out( prova( Agente,Questao,verdade ) ).
 demo( Agente, Questao):- 
     nao(Agente??Questao),
-    nao(-Agente??Questao),
+    nao(-(Agente??Questao)),
     write('e desconhecido'), nl,
     out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
@@ -75,7 +75,7 @@ avestruz ?? cor( cinzento ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
+-((Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A)))).
 
 
 
@@ -96,7 +96,7 @@ avestruz ?? alimento( invertebrados ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-((Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A)))).
 
 
 
@@ -115,7 +115,7 @@ avestruz ?? cobertura( penas ).
 
 
 
--(Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-((Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -131,7 +131,7 @@ avestruz ?? locomocao( terrestre ).
                                 ).
 
 
--(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-((Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -146,7 +146,7 @@ avestruz ?? reproducao( oviparo ).
                                 comprimento( S,N ), N == 1
                                 ).
 
--(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-((Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -161,7 +161,7 @@ avestruz ?? comunicacao( pio ).
                                 comprimento( S,N ), N == 1
                                 ).
 
--(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
+-((Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -177,14 +177,14 @@ avestruz ?? nome_cientifico( incerto ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??nome_cientifico(A)) :- nao(Ag??nome_cientifico(A)), nao(excepcao(Ag??nome_cientifico(A))).
+-((Ag??nome_cientifico(A)) :- nao(Ag??nome_cientifico(A)), nao(excepcao(Ag??nome_cientifico(A)))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??nome_cientifico(A)):- Ag??nome_cientifico( incerto).
 
 
 
--(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}

@@ -51,7 +51,7 @@ demo( Agente,Questao ) :-
     out( prova( Agente,Questao,verdade ) ).
 demo( Agente, Questao):- 
     nao(Agente??Questao),
-    nao(-Agente??Questao),
+    nao(-(Agente??Questao)),
     write('e desconhecido'), nl,
     out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
@@ -72,7 +72,7 @@ animal ?? ciencia( zoologia ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??ciencia(A)) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A))).
+-((Ag??ciencia(A)) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -88,10 +88,10 @@ animal ?? seres( eucariontes).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??seres(A)) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A))).
+-((Ag??seres(A)) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A)))).
 
 
--(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}

@@ -53,7 +53,7 @@ demo( Agente,Questao ) :-
     out( prova( Agente,Questao,verdade ) ).
 demo( Agente, Questao):- 
     nao(Agente??Questao),
-    nao(-Agente??Questao),
+    nao(-(Agente??Questao)),
     write('e desconhecido'), nl,
     out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
@@ -76,7 +76,7 @@ mamifero ?? cobertura( pelos ).
 
 
 
--(Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-((Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -94,7 +94,7 @@ mamifero ?? locomocao( aquatica ).
                                 ).
 
 
--(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-((Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -109,10 +109,10 @@ mamifero??reproducao( viviparo ).
                                 comprimento( S,N ), N == 1
                                 ).
 
--(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-((Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
--(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
 
 nao( Questao ) :-
     Questao, !, fail.

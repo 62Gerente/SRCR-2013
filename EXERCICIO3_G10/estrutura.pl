@@ -25,7 +25,6 @@ e_um(ave, animal, []).
 e_um(mamifero, animal, []).
 e_um(avestruz, ave, [locomocao(_)]).
 e_um(golfinho, mamifero, [locomocao(aerea), locomocao(terrestre)]).
-e_um(golfinho, ave, []).
 e_um(batman, ave, [cobertura(_),reproducao(_),alimento(_)] ).
 e_um(batman, mamifero, [locomocao(terrestre),locomocao(aquatica)]).
 

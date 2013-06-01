@@ -38,7 +38,7 @@
 demo :-
     write( 'Ave' ),nl,
     in( demo( ave,Questao ) ),
-    write( 'demo( ave,Questao )' ),nl,
+    write( demo( golfinho,Questao ) ),nl,
     demo( ave,Questao ),
     demo.
 
@@ -52,7 +52,7 @@ demo( Agente,Questao ) :-
     out( prova( Agente,Questao,verdade ) ).
 demo( Agente, Questao):- 
     nao(Agente??Questao),
-    nao(-Agente??Questao),
+    nao(-(Agente??Questao)),
     write('e desconhecido'), nl,
     out(prova(Agente,Questao,desconhecido)).
 demo( Agente,Questao ) :-
@@ -75,7 +75,7 @@ ave ?? alimento( insectos ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-((Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A)))).
 
 
 
@@ -94,7 +94,7 @@ ave ?? cobertura( penas ).
 
 
 
--(Ag??cobertura(A,B)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-((Ag??cobertura(A,B)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -110,7 +110,7 @@ ave ?? locomocao( voo ).
                                 ).
 
 
--(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-((Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A)))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -125,12 +125,12 @@ ave ?? reproducao( oviparo ).
                                 comprimento( S,N ), N == 1
                                 ).
 
--(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-((Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A)))).
 
 
 
 
--(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
