@@ -8,7 +8,9 @@
 % SICStus PROLOG: definicoes iniciais
 
 :- op( 900,xfy,'::' ).
+:- op( 800,xfx,'??' ).
 :- dynamic '-'/1.
+:- dynamic '??'/2.
 :- dynamic cor/2.
 :- dynamic alimento/2.
 :- dynamic cobertura/2.
@@ -67,13 +69,13 @@ avestruz ?? cor( cinzento ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cor(A,B) :: (findall(A,cor( A ), S),
++(Ag??cor(A,B)) :: (findall(A, Ag??cor( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??cor(A) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
+-(Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
 
 
 
@@ -88,13 +90,13 @@ avestruz ?? alimento( invertebrados ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??alimento(A) :: (findall(A,alimento( A ), S),
++(Ag??alimento(A)) :: (findall(A, Ag??alimento( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??alimento(A) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 
@@ -107,13 +109,13 @@ avestruz ?? cobertura( penas ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cobertura(A) :: (findall(A,Ag??cobertura( A ), S),
++(Ag??cobertura(A)) :: (findall(A, Ag??cobertura( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 
--Ag??cobertura(A) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-(Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -124,12 +126,12 @@ avestruz ?? locomocao( terrestre ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??locomocao(A) :: (findall(A,Ag??locomocao( A ), S),
++(Ag??locomocao(A)) :: (findall(A, Ag??locomocao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
--Ag??locomocao(A) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -140,11 +142,11 @@ avestruz ?? reproducao( oviparo ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??reproducao(A) :: (findall(A,reproducao( A ), S),
++(Ag??reproducao(A)) :: (findall(A, Ag??reproducao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
--Ag??reproducao(A) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -155,11 +157,11 @@ avestruz ?? comunicacao( pio ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??comunicacao(A) :: (findall(A,comunicacao( A ), S),
++(Ag??comunicacao(A)) :: (findall(A, Ag??comunicacao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
--Ag??comunicacao(A) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
+-(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -170,25 +172,25 @@ avestruz ?? nome_cientifico( incerto ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??nome_cientifico(A) :: (findall(A,nome_cientifico( A ), S),
++(Ag??nome_cientifico(A)) :: (findall(A, Ag??nome_cientifico( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??nome_cientifico(A) :- nao(Ag??nome_cientifico(A)), nao(excepcao(Ag??nome_cientifico(A))).
+-(Ag??nome_cientifico(A)) :- nao(Ag??nome_cientifico(A)), nao(excepcao(Ag??nome_cientifico(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??nome_cientifico(A)):- Ag??nome_cientifico( incerto).
 
 
 
--Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -206,7 +208,7 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         
@@ -220,3 +222,11 @@ ligar( QN ) :-
 
 qn( L ) :-
     bagof_rd_noblock( X,X,L ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extens�o do predicado comprimento: L, R -> {V, F}
+
+comprimento([], 0) .
+comprimento([H|T], R) :-
+	comprimento(T, X),
+	R is 1+X .

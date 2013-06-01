@@ -11,6 +11,7 @@
 :- use_module( library( 'linda/client' ) ).
 :- op( 900,xfy,'::' ).
 :- op( 800,xfx,'??' ).
+:- dynamic '??'/2.
 :- dynamic '-'/1.
 :- dynamic cor/2.
 :- dynamic alimento/1.
@@ -68,12 +69,12 @@ golfinho ?? cor( cinzento ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cor(C) :: (findall(C, Ag??cor(C), S),
++(Ag??cor(C)) :: (findall(C, Ag??cor(C), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??cor(C) :- nao(Ag??cor(C)), nao(excepcao(Ag??cor(C))).
+-(Ag??cor(C)) :- nao(Ag??cor(C)), nao(excepcao(Ag??cor(C))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Golfinho,Alimento -> {V,F}
@@ -83,12 +84,12 @@ golfinho ?? alimento( peixes ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??alimento(A) :: (findall(A , Ag??( A ), S),
++(Ag??alimento(A))::(findall(A , Ag??alimento( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??alimento(A) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -99,12 +100,12 @@ golfinho ?? comunicacao( ultra-som ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??comunicacao(A) :: (findall(A,Ag??comunicacao( A ), S),
++(Ag??comunicacao(A)) :: (findall(A, Ag??comunicacao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??comunicacao(A) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
+-(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado locomocao: Golfinho,Locomocao -> {V,F}
@@ -115,12 +116,12 @@ golfinho ?? locomocao( aquatica ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??locomocao(A) :: (findall(A,Ag??locomocao( A ), S),
++(Ag??locomocao(A)) :: (findall(A, Ag??locomocao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??locomocao(A) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado localizacao: Golfinho,Localizacao -> {V,F}
@@ -129,12 +130,12 @@ golfinho ?? locomocao( aquatica ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??localizacao(A) :: (findall(A,localizacao( A ), S),
++(Ag??localizacao(A)) :: (findall(A, localizacao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??localizacao(A) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
+-(Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??localizacao(B)):- B=='Atlantico'; B=='Pacifico'.
@@ -143,7 +144,7 @@ excepcao(Ag??localizacao(B)):- B=='Atlantico'; B=='Pacifico'.
 
 
 
--Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 
@@ -156,14 +157,14 @@ nao( Questao ).
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
 insercao(Termo) :-
-        assert(golfinho??Termo) .
+        assert(Termo) .
 insercao(Termo) :-
-        retract(golfinho??Termo), !, fail .
+        retract(Termo), !, fail .
 
 teste([]) .
 teste([H|T]) :-
@@ -174,7 +175,7 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         
@@ -189,3 +190,11 @@ ligar( QN ) :-
 
 qn( L ) :-
     bagof_rd_noblock( X,X,L ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extens�o do predicado comprimento: L, R -> {V, F}
+
+comprimento([], 0) .
+comprimento([H|T], R) :-
+	comprimento(T, X),
+	R is 1+X .

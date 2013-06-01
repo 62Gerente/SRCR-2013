@@ -8,7 +8,9 @@
 % SICStus PROLOG: definicoes iniciais
 
 :- op( 900,xfy,'::' ).
+:- op( 800,xfx,'??' ).
 :- dynamic '-'/1.
+:- dynamic '??'/2.
 :- dynamic alimento/2.
 :- dynamic cobertura/2.
 :- dynamic locomocao/2.
@@ -67,13 +69,13 @@ ave ?? alimento( insectos ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??alimento(A) :: (findall(A,Ag??alimento( A ), S),
++(Ag??alimento(A)) :: (findall(A, Ag??alimento( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??alimento(A) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 
@@ -86,13 +88,13 @@ ave ?? cobertura( penas ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cobertura(A) :: (findall(A,Ag??cobertura( A ), S),
++(Ag??cobertura(A)) :: (findall(A, Ag??cobertura( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 
--Ag??cobertura(A,B) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-(Ag??cobertura(A,B)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -103,12 +105,12 @@ ave ?? locomocao( voo ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??locomocao(A) :: (findall(A,Ag??locomocao( A ), S),
++(Ag??locomocao(A)) :: (findall(A,Ag??locomocao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
--Ag??locomocao(A) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -119,16 +121,16 @@ ave ?? reproducao( oviparo ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??reproducao(A) :: (findall(A,Ag??reproducao( A ), S),
++(Ag??reproducao(A)) :: (findall(A ,Ag??reproducao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
--Ag??reproducao(A) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
 
 
--Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -145,7 +147,7 @@ comprimento([H|T], R) :-
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -163,7 +165,7 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         

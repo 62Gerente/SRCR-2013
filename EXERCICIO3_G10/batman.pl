@@ -8,6 +8,8 @@
 % SICStus PROLOG: definicoes iniciais
 
 :- op( 900,xfy,'::' ).
+:- op( 800,xfx,'??' ).
+:- dynamic '??'/2.
 :- dynamic '-'/1.
 :- dynamic cor/2.
 :- dynamic alimento/2.
@@ -63,12 +65,12 @@ batman ?? cor( preto ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cor(A) :: (findall(A,cor( A ), S),
++(Ag??cor(A)) :: (findall(A, Ag??cor( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??cor(A) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
+-(Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Batman,Alimento -> {V,F}
@@ -79,12 +81,12 @@ batman ?? alimento( legumes ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+AAg??alimento(A) :: (findall(A,alimento( A ), S),
++(Ag??alimento(A)) :: (findall(A, Ag??alimento( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??alimento(A) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -95,12 +97,12 @@ batman ?? comunicacao( ultra-som ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??comunicacao(A) :: (findall(A,comunicacao( A ), S),
++(Ag??comunicacao(A)) :: (findall(A, Ag??comunicacao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??comunicacao(A) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
+-(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
 
 
 
@@ -112,12 +114,12 @@ batman ?? localizacao( incerto ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??localizacao(A) :: (findall(A,localizacao( A ), S),
++(Ag??localizacao(A)) :: (findall(A, Ag??localizacao( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??localizacao(A) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
+-(Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??localizacao(A)):- Ag??localizacao( incerto).
@@ -131,16 +133,16 @@ batman ?? data_registo( data_nula ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??data_registo(A) :: (findall(A,data_registo( A ), S),
++(Ag??data_registo(A)) :: (findall(A, Ag??data_registo( A ), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %% Não permitir que a data de introducao do cegripe em comprimidos venha a ser inserida %%
-+data_registo(A) :: (findall((B_X), (Aga??data_registo( B_X), nao(nulo(B_X))), [])).
++(data_registo(A)) :: (findall((B_X), (Aga??data_registo( B_X), nao(nulo(B_X))), [])).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??data_registo(A) :- nao(Ag??data_registo(A)), nao(excepcao(Ag??data_registo(A))).
+-(Ag??data_registo(A)) :- nao(Ag??data_registo(A)), nao(excepcao(Ag??data_registo(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??data_registo(A)):- Ag??data_registo( data_nula).
@@ -155,7 +157,7 @@ nulo(data_nula).
 
 
 
--Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 nao( Questao ) :-
@@ -177,7 +179,7 @@ comprimento([H|T], R) :-
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -195,7 +197,7 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         

@@ -9,6 +9,7 @@
 
 :- op( 900,xfy,'::' ).
 :- op( 800,xfx,'??' ).
+:- dynamic '??'/2.
 :- dynamic '-'/1.
 :- dynamic ciencia/2.
 :- dynamic seres/2.
@@ -66,12 +67,12 @@ animal ?? ciencia( zoologia ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??ciencia(A) :: (findall((A),ciencia( A), S),
++(Ag??ciencia(A)) :: (findall((A), Ag??ciencia( A), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??ciencia(A) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A))).
+-(Ag??ciencia(A)) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -82,21 +83,21 @@ animal ?? seres( eucariontes).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??seres(A) :: (findall(A,seres( A), S),
++(Ag??seres(A)) :: (findall(A, Ag??seres( A), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--Ag??seres(A) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A))).
+-(Ag??seres(A)) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A))).
 
 
--Agente??Questao :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -119,7 +120,7 @@ nao( Questao ).
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         
@@ -134,3 +135,11 @@ ligar( QN ) :-
 
 qn( L ) :-
     bagof_rd_noblock( X,X,L ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extens�o do predicado comprimento: L, R -> {V, F}
+
+comprimento([], 0) .
+comprimento([H|T], R) :-
+	comprimento(T, X),
+	R is 1+X .

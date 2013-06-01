@@ -9,6 +9,7 @@
 
 :- op( 900,xfy,'::' ).
 :- op( 800,xfx,'??' ).
+:- dynamic '??'/2.
 :- dynamic '-'/1.
 :- dynamic alimento/1.
 :- dynamic cor/1.
@@ -36,7 +37,7 @@
 % Iniciaizacao da vida do agente
 
 demo :-
-    write( 'Mamífero' ),nl,
+    write( 'Mamifero' ),nl,
     in( demo( mamifero,Questao ) ),
     write( demo( mamifero,Questao ) ),nl,
     demo( mamifero,Questao ),
@@ -69,13 +70,13 @@ mamifero ?? cobertura( pelos ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??cobertura(A) :: (findall(A,cobertura( A), S),
++(Ag??cobertura(A)) :: (findall(A, Ag??cobertura( A), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
 
--Ag??cobertura(A) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
+-(Ag??cobertura(A)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -88,12 +89,12 @@ mamifero ?? locomocao( aquatica ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??locomocao(A) :: (findall(A,locomocao( A), S),
++(Ag??locomocao(A)) :: (findall(A, Ag??locomocao( A), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
 
--Ag??locomocao(A) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -104,14 +105,14 @@ mamifero??reproducao( viviparo ).
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
 %% Não pode haver conhecimento repetido %%
-+Ag??reproducao(A) :: (findall(A,reproducao( A), S),
++(Ag??reproducao(A)) :: (findall(A, Ag??reproducao( A), S),
                                 comprimento( S,N ), N == 1
                                 ).
 
--Ag??reproducao(A) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
+-(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
--Agente??Questao:- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 nao( Questao ) :-
     Questao, !, fail.
@@ -122,7 +123,7 @@ nao( Questao ).
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
 
 inserirConhecimento(Termo) :-
-        findall( Invariante, +Termo::Invariante, Lista),
+        findall( Invariante, +(Termo)::Invariante, Lista),
         insercao(Termo),
         teste( Lista ).
 
@@ -140,7 +141,7 @@ teste([H|T]) :-
 % Extensão do predicado que permite a remoção de conhecimento: Termo -> {v, F}
 
 removerConhecimento(Termo) :-
-        findall( Invariante, -Termo::Invariante, Lista),
+        findall( Invariante, -(Termo)::Invariante, Lista),
         teste( Lista ) ,
         remocao(Termo).
         
@@ -155,3 +156,11 @@ ligar( QN ) :-
 
 qn( L ) :-
     bagof_rd_noblock( X,X,L ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extens�o do predicado comprimento: L, R -> {V, F}
+
+comprimento([], 0) .
+comprimento([H|T], R) :-
+	comprimento(T, X),
+	R is 1+X .

@@ -75,6 +75,7 @@ esperar(Agente,Questao):-
     write('Nao foi possivel contactar o agente '),
     write(Agente),nl,
     assert(ciclos(0)),
+    in( demo( Agente, Questao)),
     demo(estrutura,Agente,Questao).
 
 
