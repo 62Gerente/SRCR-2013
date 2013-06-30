@@ -20,7 +20,7 @@ demo( Agente,Questao, Res ) :-
 
 esperar(Questao, Res):- 
 	rd_noblock(prova(Agente,Questao,R)),
-    in(prova(Agente,Questao,R)),
+   % in(prova(Agente,Questao,R)),
     Res = R .
     %write(prova(Agente,Questao,R)).
 esperar(Questao, Res):-

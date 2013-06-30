@@ -31,7 +31,7 @@ e_um(batman, mamifero, [locomocao(terrestre),locomocao(aquatica)]).
 
 
 ciclos(0).
-max_ciclos(1000).
+max_ciclos(1500).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -61,21 +61,38 @@ demo( estrutura,Agente,Questao ) :-
 
 
 
+esperar(Agente,Questao):-
+     max_ciclos(M),
+     retract(ciclos(X)),
+     X<M,
+     assert(ciclos(X+1)),
+     esperar(Agente,Questao).
 esperar(Agente,Questao):- 
-    (rd_noblock(prova(Agente,Questao,_));  
-    rd_noblock(demo(estrutura,Agente,Questao))).
-esperar(Agente,Questao):-
-    max_ciclos(M),
-    retract(ciclos(X)),
-    X<M,
-    assert(ciclos(X+1)),
-    esperar(Agente,Questao).
-esperar(Agente,Questao):-
+     (rd_noblock(prova(Agente,Questao,_));  
+     rd_noblock(demo(estrutura,Agente,Questao))),
+     assert(ciclos(0)).
+esperar(Agente, Questao) :-
     write('Nao foi possivel contactar o agente '),
     write(Agente),nl,
     assert(ciclos(0)),
     in( demo( Agente, Questao)),
     demo(estrutura,Agente,Questao).
+
+%% esperar(Agente,Questao):- 
+%%     (rd_noblock(prova(Agente,Questao,_));  
+%%     rd_noblock(demo(estrutura,Agente,Questao))).
+%% esperar(Agente,Questao):-
+%%     max_ciclos(M),
+%%     retract(ciclos(X)),
+%%     X<M,
+%%     assert(ciclos(X+1)),
+%%     esperar(Agente,Questao).
+%% esperar(Agente,Questao):-
+%%     write('Nao foi possivel contactar o agente '),
+%%     write(Agente),nl,
+%%     assert(ciclos(0)),
+%%     demo(estrutura,Agente,Questao).
+
 
 
 pertence(X, [X|T]).

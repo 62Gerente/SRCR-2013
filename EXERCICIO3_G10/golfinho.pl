@@ -23,6 +23,7 @@
 :- dynamic reproducao/1.
 :- dynamic ciencia/1.
 :- dynamic seres/1.
+:- dynamic excepcao/1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % SICStus PROLOG: Carregamento das bibliotecas
@@ -74,7 +75,7 @@ golfinho ?? cor( cinzento ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??cor(C)) :- nao(Ag??cor(C)), nao(excepcao(Ag??cor(C)))).
+-(Ag??cor(C)) :- nao(Ag??cor(C)), nao(excepcao(Ag??cor(C))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Golfinho,Alimento -> {V,F}
@@ -89,7 +90,7 @@ golfinho ?? alimento( peixes ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A)))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -105,7 +106,7 @@ golfinho ?? comunicacao( ultra-som ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A)))).
+-(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado locomocao: Golfinho,Locomocao -> {V,F}
@@ -121,7 +122,7 @@ golfinho ?? locomocao( aquatica ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A)))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado localizacao: Golfinho,Localizacao -> {V,F}
@@ -135,16 +136,16 @@ golfinho ?? locomocao( aquatica ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A)))).
+-(Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
 
-%%%%%%%%%%   Excep�oes    %%%%%%%%%%
+%%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??localizacao(B)):- B=='Atlantico'; B=='Pacifico'.
 
 
 
 
 
--((Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
+-(Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 

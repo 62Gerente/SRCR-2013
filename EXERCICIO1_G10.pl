@@ -66,7 +66,7 @@ filho(connie, carmelia).
 filho(fredo, vito).
 filho(fredo, carmelia).
 
-filho(anthony, michae).
+filho(anthony, michael).
 filho(anthony, key).
 
 filho(mary, michael).

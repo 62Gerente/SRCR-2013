@@ -22,7 +22,7 @@
 :- dynamic ciencia/2.
 :- dynamic seres/2.
 :- dynamic localizacao/2.
-
+:- dynamic excepcao/1.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % SICStus PROLOG: Carregamento das bibliotecas
@@ -35,7 +35,7 @@
 demo :-
     write( 'Batman' ),nl,
     in( demo( batman,Questao ) ),
-    write( demo( golfinho,Questao ) ),nl,
+    write( demo( batman,Questao ) ),nl,
     demo( batman,Questao ),
     demo.
 
@@ -70,7 +70,7 @@ batman ?? cor( preto ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A)))).
+-(Ag??cor(A)) :- nao(Ag??cor(A)), nao(excepcao(Ag??cor(A))).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado alimento: Batman,Alimento -> {V,F}
@@ -86,7 +86,7 @@ batman ?? alimento( legumes ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A)))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -102,7 +102,7 @@ batman ?? comunicacao( ultra-som ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A)))).
+-(Ag??comunicacao(A)) :- nao(Ag??comunicacao(A)), nao(excepcao(Ag??comunicacao(A))).
 
 
 
@@ -119,7 +119,7 @@ batman ?? localizacao( incerto ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A)))).
+-(Ag??localizacao(A)) :- nao(Ag??localizacao(A)), nao(excepcao(Ag??localizacao(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??localizacao(A)):- Ag??localizacao( incerto).
@@ -142,7 +142,7 @@ batman ?? data_registo( data_nula ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??data_registo(A)) :- nao(Ag??data_registo(A)), nao(excepcao(Ag??data_registo(A)))).
+-(Ag??data_registo(A)) :- nao(Ag??data_registo(A)), nao(excepcao(Ag??data_registo(A))).
 
 %%%%%%%%%%   Excepções    %%%%%%%%%%
 excepcao(Ag??data_registo(A)):- Ag??data_registo( data_nula).
@@ -157,7 +157,7 @@ nulo(data_nula).
 
 
 
--((Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
+-(Agente??Questao):- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 nao( Questao ) :-

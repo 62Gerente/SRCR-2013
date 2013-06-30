@@ -21,6 +21,7 @@
 :- dynamic data_registo/2.
 :- dynamic ciencia/2.
 :- dynamic seres/2.
+:- dynamic excepcao/1.
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -38,7 +39,7 @@
 demo :-
     write( 'Ave' ),nl,
     in( demo( ave,Questao ) ),
-    write( demo( golfinho,Questao ) ),nl,
+    write( 'demo( ave,Questao )' ),nl,
     demo( ave,Questao ),
     demo.
 
@@ -75,7 +76,7 @@ ave ?? alimento( insectos ).
 
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A)))).
+-(Ag??alimento(A)) :- nao(Ag??alimento(A)), nao(excepcao(Ag??alimento(A))).
 
 
 
@@ -94,7 +95,7 @@ ave ?? cobertura( penas ).
 
 
 
--((Ag??cobertura(A,B)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A)))).
+-(Ag??cobertura(A,B)) :- nao(Ag??cobertura(A)), nao(excepcao(Ag??cobertura(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -110,7 +111,7 @@ ave ?? locomocao( voo ).
                                 ).
 
 
--((Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A)))).
+-(Ag??locomocao(A)) :- nao(Ag??locomocao(A)), nao(excepcao(Ag??locomocao(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -125,12 +126,12 @@ ave ?? reproducao( oviparo ).
                                 comprimento( S,N ), N == 1
                                 ).
 
--((Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A)))).
+-(Ag??reproducao(A)) :- nao(Ag??reproducao(A)), nao(excepcao(Ag??reproducao(A))).
 
 
 
 
--((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
@@ -159,6 +160,10 @@ insercao(Termo) :-
 teste([]) .
 teste([H|T]) :-
         H, teste(T) .  
+
+nao( Questao ) :-
+    Questao, !, fail.
+nao( Questao ).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -

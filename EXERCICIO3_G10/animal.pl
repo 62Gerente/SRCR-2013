@@ -37,7 +37,7 @@
 demo :-
     write( 'Animal' ),nl,
     in( demo( animal,Questao ) ),
-    write( demo( golfinho,Questao ) ),nl,
+    write( demo( animal,Questao ) ),nl,
     demo( animal,Questao ),
     demo.
 
@@ -72,13 +72,13 @@ animal ?? ciencia( zoologia ).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??ciencia(A)) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A)))).
+-(Ag??ciencia(A)) :- nao(Ag??ciencia(A)), nao(excepcao(Ag??ciencia(A))).
 
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensao do predicado seres: Animal,Seres -> {V,F}
 
-animal ?? seres( eucariontes).
+animal ?? seres(eucariontes).
 
 %%%%%%%%%%  Invariantes   %%%%%%%%%%
 
@@ -88,10 +88,10 @@ animal ?? seres( eucariontes).
                                 ).
 
 %%%%%%%%%%   Conhecimento negativo    %%%%%%%%%%
--((Ag??seres(A)) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A)))).
+-(Ag??seres(A)) :- nao(Ag??seres(A)), nao(excepcao(Ag??seres(A))).
 
 
--((Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao))).
+-(Agente??Questao) :- nao(Agente??Questao), nao(excepcao(Agente??Questao)).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a inserção de conhecimento: Termo -> {v, F}
